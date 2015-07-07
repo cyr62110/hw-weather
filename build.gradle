@@ -1,0 +1,9 @@
+allprojects {
+    ext {
+        kotlinVersion = '0.12.613'
+    }
+
+    repositories {
+        jcenter()
+    }
+}
