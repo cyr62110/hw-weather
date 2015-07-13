@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleSliderLayout">
+        <attr name="useAntiAliasing" format="boolean" />
+
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+
+        <attr name="progressValue" format="float" />
+        <attr name="progressMaxValue" format="float" />
+        <attr name="progressWidth" format="dimension" />
+        <attr name="progressTint" format="color" />
+        <attr name="progressBackgroundColor" format="color" />
+
+        <attr name="secondaryProgressValue" format="float" />
+        <attr name="secondaryProgressMaxValue" format="float" />
+        <attr name="secondaryProgressWidth" format="dimension" />
+        <attr name="secondaryProgressTint" format="color" />
+
+        <attr name="thumb" format="reference" />
+    </declare-styleable>
+</resources>
