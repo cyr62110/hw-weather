@@ -2,11 +2,13 @@ package fr.cvlaminck.hwweather.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
@@ -14,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -87,6 +90,10 @@ public class CircleSliderLayout
     private int secondaryProgressWidth;
 
     private Drawable thumb;
+    private ColorStateList thumbTint = null;
+    private PorterDuff.Mode thumbTintMode = null;
+
+    private boolean dragging = false;
 
     private Rect tempRect = new Rect();
     private MotionEvent.PointerCoords tempCoords = new MotionEvent.PointerCoords();
@@ -142,6 +149,8 @@ public class CircleSliderLayout
         secondaryProgressTint = Color.DKGRAY; //FIXME: Change this color to a material one
 
         thumb = null;
+        thumbTint = ColorStateList.valueOf(progressTint);
+        thumbTintMode = PorterDuff.Mode.DST;
     }
 
     private int dipToPixels(float dip, DisplayMetrics displayMetrics) {
@@ -174,6 +183,16 @@ public class CircleSliderLayout
         secondaryProgressTint = a.getColor(R.styleable.CircleSliderLayout_secondaryProgressTint, secondaryProgressTint);
 
         Drawable thumb = a.getDrawable(R.styleable.CircleSliderLayout_thumb);
+        if (a.hasValue(R.styleable.CircleSliderLayout_thumbTint)) {
+            thumbTint = a.getColorStateList(R.styleable.CircleSliderLayout_thumbTint);
+        } else {
+            thumbTint = null;
+        }
+        if (a.hasValue(R.styleable.CircleSliderLayout_thumbTintMode)) {
+            thumbTintMode = parseTintMode(a.getInt(R.styleable.CircleSliderLayout_thumbTintMode, -1), thumbTintMode);
+        } else {
+            thumbTintMode = null;
+        }
 
         setProgressMaxValue(progressMaxValue);
         setSecondaryProgressMaxValue(secondProgressMaxValue);
@@ -184,6 +203,25 @@ public class CircleSliderLayout
         setThumb(thumb);
 
         a.recycle();
+    }
+
+    private PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode) {
+        switch (value) {
+            case 3:
+                return PorterDuff.Mode.SRC_OVER;
+            case 5:
+                return PorterDuff.Mode.SRC_IN;
+            case 9:
+                return PorterDuff.Mode.SRC_ATOP;
+            case 14:
+                return PorterDuff.Mode.MULTIPLY;
+            case 15:
+                return PorterDuff.Mode.SCREEN;
+            case 16:
+                return PorterDuff.Mode.ADD;
+            default:
+                return defaultMode;
+        }
     }
 
     @Override
@@ -318,6 +356,10 @@ public class CircleSliderLayout
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (dragging == true) {
+            //If the user is dragging the view, we intercept all touch events.
+            return true;
+        }
         if (!isEnabled()) {
             //If our view is not enabled, we intercept all touch event so the user can interract with
             //the children views.
@@ -349,25 +391,98 @@ public class CircleSliderLayout
 
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                return onTouchEventActionDown(ev, coords);
+                if (isTouchEventOnThumb(coords)) {
+                    setPressed(true);
+                    dragging = true;
+                    trackTouchEvent(ev, coords);
+                    return true;
+                }
+                return false;
             case MotionEvent.ACTION_MOVE:
-                break;
+                if (dragging) {
+                    trackTouchEvent(ev, coords);
+                    return true;
+                }
+                return false;
             case MotionEvent.ACTION_UP:
-                break;
             case MotionEvent.ACTION_CANCEL:
-                break;
+                if (dragging) {
+                    setPressed(false);
+                    dragging = false;
+                    return true;
+                }
         }
         return false;
     }
 
-    private boolean onTouchEventActionDown(MotionEvent ev, MotionEvent.PointerCoords coords) {
-        if (isTouchEventOnThumb(coords)) {
-            setPressed(true);
-            invalidate(getThumbRect(tempRect));
-            //FIXME add a boolean to track if the user is interracting with the view.
-            return true;
+    private void trackTouchEvent(MotionEvent ev, MotionEvent.PointerCoords coords) {
+        double angle = getAngle(coords);
+        float progress = getProgressValueFromAngle(angle);
+        setProgressValue(progress);
+    }
+
+    private double getAngle(MotionEvent.PointerCoords coords) {
+        Rect childrenViewRect = getChildrenViewRect(tempRect);
+
+        double centeredX = coords.x - childrenViewRect.centerX();
+        double centeredY = childrenViewRect.centerY() - coords.y;
+
+        double radius = Math.sqrt(Math.pow(centeredX, 2) + Math.pow(centeredY, 2));
+        double cos = centeredX / radius;
+        double sin = centeredY / radius;
+
+        double angle = 0.0f;
+        if (cos > 0) {
+            angle = Math.asin(sin);
+        } else if (cos == 0) {
+            angle = ((sin > 0) ? 1 : -1) * Math.PI / 2;
+        } else {
+            angle = Math.asin(-sin) + Math.PI;
         }
-        return false;
+        angle = 2 * Math.PI - (angle - Math.PI / 2); //Trigonometric angle do not rotate in the right sens. So we correct that and adjust our 0.
+
+        while (angle < 0 || angle > 2 * Math.PI) {
+            angle += ((angle < 0) ? 1 : -1) * 2 * Math.PI;
+        }
+        return angle;
+    }
+
+    private float getProgressValueFromAngle(double angle) {
+        return (float) (angle / (2 * Math.PI)) * progressMaxValue;
+    }
+
+    //Those four methods must be overridden if you want your drawable to react to the
+    //change of the view state: disabled, pressed, etc...
+    @Override
+    protected boolean verifyDrawable(Drawable who) {
+        return who == thumb || super.verifyDrawable(who);
+    }
+
+    @Override
+    public void jumpDrawablesToCurrentState() {
+        super.jumpDrawablesToCurrentState();
+
+        if (thumb != null) {
+            thumb.jumpToCurrentState();
+        }
+    }
+
+    @Override
+    protected void drawableStateChanged() {
+        super.drawableStateChanged();
+
+        if (thumb != null && thumb.isStateful()) {
+            thumb.setState(getDrawableState());
+        }
+    }
+
+    @Override
+    public void drawableHotspotChanged(float x, float y) {
+        super.drawableHotspotChanged(x, y);
+
+        if (thumb != null) {
+            thumb.setHotspot(x, y);
+        }
     }
 
     /**
@@ -488,23 +603,25 @@ public class CircleSliderLayout
     }
 
     private void applyThumbTint() {
-        /* FIXME
-        if (mThumb != null && (mHasThumbTint || mHasThumbTintMode)) {
-            mThumb = mThumb.mutate();
-            if (mHasThumbTint) {
-                mThumb.setTintList(mThumbTintList);
-            }
+        if (thumb == null) {
+            return;
+        }
 
-            if (mHasThumbTintMode) {
-                mThumb.setTintMode(mThumbTintMode);
+        if (thumbTint != null || thumbTintMode != null) {
+            thumb = thumb.mutate();
+            if (thumbTint != null) {
+                thumb.setTintList(thumbTint);
             }
-            // The drawable (or one of its children) may not have been
-            // stateful before applying the tint, so let's try again.
-            if (mThumb.isStateful()) {
-                mThumb.setState(getDrawableState());
+            if (thumbTintMode != null) {
+                thumb.setTintMode(thumbTintMode);
             }
         }
-        */
+
+        // The drawable (or one of its children) may not have been
+        // stateful before applying the tint, so let's try again.
+        if (thumb.isStateful()) {
+            thumb.setState(getDrawableState());
+        }
     }
 
     public void setProgressValue(float progressValue) {
@@ -561,7 +678,7 @@ public class CircleSliderLayout
         }
 
         if (thumb != null) {
-            thumb.setCallback(null); //FIXME
+            thumb.setCallback(this);
             //We translate the canvas to draw the thumb, so we set the bounds here.
             thumb.setBounds(0, 0, thumb.getIntrinsicWidth(), thumb.getIntrinsicHeight());
 
@@ -570,10 +687,6 @@ public class CircleSliderLayout
             if (this.thumb == null || this.thumb.getIntrinsicHeight() != thumb.getIntrinsicHeight() ||
                     this.thumb.getIntrinsicWidth() != thumb.getIntrinsicWidth()) {
                 requestLayout();
-            }
-
-            if (thumb.isStateful()) {
-                thumb.setState(getDrawableState());
             }
         }
 
