@@ -3,12 +3,13 @@
     package="fr.cvlaminck.hwweather" >
 
     <application
+        android:label="HWWeather"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme" >
         <activity
-            android:name=".activities.HomeActivity"
-            android:label="Home activity">
+            android:name=".front.activities.ForecastActivity"
+            android:theme="@style/Theme.ForecastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -9,7 +9,7 @@
     <fr.cvlaminck.hwweather.views.CircleSliderLayout
         android:id="@+id/cslSlider"
         style="@style/Widget.CircleSliderLayout"
-        app:progressValue="0.7"
+        app:progressValue="0.125"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">

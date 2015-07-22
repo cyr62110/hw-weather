@@ -1,7 +1,8 @@
-package fr.cvlaminck.hwweather.activities
+package fr.cvlaminck.hwweather.front.activities
 
 import android.app.Activity
 import android.os.Bundle
+
 import fr.cvlaminck.hwweather.R
 
 class HomeActivity : Activity() {

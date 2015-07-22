@@ -4,6 +4,9 @@
     <style name="Theme" parent="android:Theme.Holo">
     </style>
 
+    <style name="Theme.ForecastActivity" parent="android:Theme.Holo.Light.NoActionBar">
+    </style>
+
     <style name="Widget"></style>
 
     <style name="Widget.CircleSliderLayout">

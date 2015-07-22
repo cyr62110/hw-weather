@@ -4,6 +4,9 @@
     <style name="Theme" parent="android:Theme.Material">
     </style>
 
+    <style name="Theme.ForecastActivity" parent="android:Theme.Material.Light.NoActionBar">
+    </style>
+
     <style name="Widget.CircleSliderLayout">
         <item name="thumb">@drawable/scrubber_control_material_anim</item>
     </style>
