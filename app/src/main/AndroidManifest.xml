@@ -3,6 +3,7 @@
     package="fr.cvlaminck.hwweather" >
 
     <application
+        android:name=".HwWeatherApplication"
         android:label="HWWeather"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
