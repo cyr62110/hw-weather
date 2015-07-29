@@ -6,7 +6,7 @@
         android:name=".HwWeatherApplication"
         android:label="HWWeather"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme" >
         <activity
             android:name=".front.activities.ForecastActivity"
