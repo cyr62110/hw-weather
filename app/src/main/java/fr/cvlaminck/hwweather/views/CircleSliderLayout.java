@@ -89,6 +89,8 @@ public class CircleSliderLayout
      */
     private int secondaryProgressWidth;
 
+    private OnCircleSliderLayoutChangeListener changeListener = null;
+
     private Drawable thumb;
     private ColorStateList thumbTint = null;
     private PorterDuff.Mode thumbTintMode = null;
@@ -393,7 +395,7 @@ public class CircleSliderLayout
             case MotionEvent.ACTION_DOWN:
                 if (isTouchEventOnThumb(coords)) {
                     setPressed(true);
-                    dragging = true;
+                    setDragging(true);
                     trackTouchEvent(ev, coords);
                     return true;
                 }
@@ -408,7 +410,7 @@ public class CircleSliderLayout
             case MotionEvent.ACTION_CANCEL:
                 if (dragging) {
                     setPressed(false);
-                    dragging = false;
+                    setDragging(false);
                     return true;
                 }
         }
@@ -418,7 +420,7 @@ public class CircleSliderLayout
     private void trackTouchEvent(MotionEvent ev, MotionEvent.PointerCoords coords) {
         double angle = getAngle(coords);
         float progress = getProgressValueFromAngle(angle);
-        setProgressValue(progress);
+        setProgressValue(progress, true);
     }
 
     private double getAngle(MotionEvent.PointerCoords coords) {
@@ -624,7 +626,21 @@ public class CircleSliderLayout
         }
     }
 
-    public void setProgressValue(float progressValue) {
+    private void setDragging(boolean dragging) {
+        if (this.dragging != dragging) {
+            this.dragging = dragging;
+            if (changeListener != null) {
+                if (this.dragging) {
+                    changeListener.onStartTrackingTouch(this);
+                } else {
+                    changeListener.onStopTrackingTouch(this);
+                }
+            }
+        }
+
+    }
+
+    private void setProgressValue(float progressValue, boolean byUser) {
         if (progressValue < 0) {
             throw new IllegalArgumentException("Progress bar value or max value cannot be negative.");
         }
@@ -633,8 +649,15 @@ public class CircleSliderLayout
         }
         if (this.progressValue != progressValue) {
             this.progressValue = progressValue;
+            if (changeListener != null) {
+                changeListener.onProgressChanged(this, progressValue, byUser);
+            }
             invalidate();
         }
+    }
+
+    public void setProgressValue(float progressValue) {
+        setProgressValue(progressValue, false);
     }
 
     public void setProgressMaxValue(float progressMaxValue) {
@@ -643,7 +666,7 @@ public class CircleSliderLayout
         }
         if (this.progressMaxValue != progressMaxValue) {
             this.progressMaxValue = progressMaxValue;
-            setProgressValue(this.progressValue);
+            setProgressValue(this.progressValue, false);
             invalidate();
         }
     }
@@ -694,5 +717,19 @@ public class CircleSliderLayout
 
         applyThumbTint();
         invalidate();
+    }
+
+    public OnCircleSliderLayoutChangeListener getOnCircleSliderLayoutChangeListener() {
+        return changeListener;
+    }
+
+    public void setOnCircleSliderLayoutChangeListener(OnCircleSliderLayoutChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface OnCircleSliderLayoutChangeListener {
+        void onProgressChanged(CircleSliderLayout circleSliderLayout, double progress, boolean fromUser);
+        void onStartTrackingTouch(CircleSliderLayout circleSliderLayout);
+        void onStopTrackingTouch(CircleSliderLayout circleSliderLayout);
     }
 }
