@@ -2,35 +2,37 @@ package fr.cvlaminck.hwweather.front.activities
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.view.LayoutInflater
+import android.support.v4.app.FragmentActivity
+import android.support.v4.view.ViewPager
 import android.view.View
-import android.widget.Toast
+import butterknife.Bind
 import butterknife.ButterKnife
 import butterknife.OnClick
 import fr.cvlaminck.hwweather.HwWeatherApplication
-
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.CityManager
-import java.util.*
+import fr.cvlaminck.hwweather.data.model.City
+import fr.cvlaminck.hwweather.front.adapters.CityForecastFragmentPagerAdapter
 import javax.inject.Inject
+import kotlinx.android.synthetic.forecastactivity.*;
 
-public class ForecastActivity : Activity() {
+public class ForecastActivity : FragmentActivity() {
 
     @Inject @publicField
     private var cityManager: CityManager? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
-        (getApplication() as HwWeatherApplication).component()?.inject(this);
-
         setContentView(R.layout.forecastactivity);
+        (getApplication() as HwWeatherApplication).component()?.inject(this);
         ButterKnife.bind(this);
+
+        initViewPager();
     }
 
-    @OnClick(R.id.btnAddCity)
-    fun btnAddCityClicked(btn: View) {
-        Toast.makeText(this, Objects.toString(lI), Toast.LENGTH_SHORT).show();
+    private fun initViewPager() {
+        val cities = cityManager!!.getCities();
+        val adapter = CityForecastFragmentPagerAdapter(this.getSupportFragmentManager(), cities);
+        vpForecast.setAdapter(adapter);
     }
 }

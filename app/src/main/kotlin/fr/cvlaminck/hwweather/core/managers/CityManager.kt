@@ -1,14 +1,13 @@
 package fr.cvlaminck.hwweather.core.managers
 
-import dagger.Component
 import fr.cvlaminck.hwweather.data.model.City
-import java.util.*
+import java.util.Arrays
+import javax.inject.Inject
 
-@Component
-public class CityManager {
+public class CityManager @Inject constructor() {
 
-    fun getCities() = {
-        Arrays.asList(City("Paris", null, null, "France"));
+    fun getCities() : List<City> {
+        return listOf(City("Paris", null, null, "France"));
     }
 
 }

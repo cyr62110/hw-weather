@@ -1,7 +1,13 @@
 package fr.cvlaminck.hwweather.data.model
 
-/**
- * Created by cyr62110 on 21/07/15.
- */
-public class DailyForecast {
+import fr.cvlaminck.hwweather.model.WeatherCondition
+import java.util.*
+
+@data class DailyForecast(
+        val day: Date,
+        val condition: WeatherCondition,
+        val temperatureMin: Double,
+        val temperatureMax: Double
+) {
+
 }

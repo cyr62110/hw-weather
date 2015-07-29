@@ -1,7 +1,11 @@
 package fr.cvlaminck.hwweather.data.model
 
-/**
- * Created by cyr62110 on 21/07/15.
- */
-public class HourlyForecast {
+import fr.cvlaminck.hwweather.model.WeatherCondition
+import java.util.*
+
+public class HourlyForecast(
+        /* FIXME val hour: Date,
+        val condition: WeatherCondition,
+        val temperature: Double*/
+) {
 }
