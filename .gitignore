@@ -5,3 +5,6 @@ build
 #Idea
 /\.idea
 *.iml
+
+#Not commited since I have no license to use those icons
+/app/mipmap
