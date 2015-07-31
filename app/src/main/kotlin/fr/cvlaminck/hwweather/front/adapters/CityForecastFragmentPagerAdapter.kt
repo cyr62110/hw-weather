@@ -3,12 +3,12 @@ package fr.cvlaminck.hwweather.front.adapters
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import fr.cvlaminck.hwweather.data.model.City
+import fr.cvlaminck.hwweather.data.model.CityEntity
 import fr.cvlaminck.hwweather.front.fragments.CityForecastFragment
 
 public class CityForecastFragmentPagerAdapter(
         fm: FragmentManager,
-        val cities : List<City>
+        val cities : List<CityEntity>
 ) : FragmentPagerAdapter(fm) {
 
     override fun getCount(): Int = cities.size();

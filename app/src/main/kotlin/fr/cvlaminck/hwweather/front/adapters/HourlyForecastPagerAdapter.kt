@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import fr.cvlaminck.hwweather.R
-import fr.cvlaminck.hwweather.data.model.HourlyForecast
+import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView
 
 public class HourlyForecastPagerAdapter(
         private val context: Context,
-        val hourlyForecasts: List<HourlyForecast>) : PagerAdapter() {
+        val hourlyForecasts: List<HourlyForecastEntity>) : PagerAdapter() {
 
     override fun getCount(): Int = hourlyForecasts.size();
 

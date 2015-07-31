@@ -11,7 +11,7 @@ import butterknife.OnClick
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.CityManager
-import fr.cvlaminck.hwweather.data.model.City
+import fr.cvlaminck.hwweather.data.model.CityEntity
 import fr.cvlaminck.hwweather.front.adapters.CityForecastFragmentPagerAdapter
 import javax.inject.Inject
 import kotlinx.android.synthetic.forecastactivity.*;

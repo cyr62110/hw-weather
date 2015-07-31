@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import fr.cvlaminck.hwweather.R
-import fr.cvlaminck.hwweather.data.model.DailyForecast
+import fr.cvlaminck.hwweather.data.model.DailyForecastEntity
 import kotlinx.android.synthetic.dailyforecastview.*;
 
 class DailyForecastView(context: Context) : LinearLayout(context) {
@@ -18,7 +18,7 @@ class DailyForecastView(context: Context) : LinearLayout(context) {
         updateViews();
     }
 
-    var forecast : DailyForecast? = null;
+    var forecast : DailyForecastEntity? = null;
 
     var imgCondition : ImageView? = null;
     var txtMinTemperature : TextView? = null;

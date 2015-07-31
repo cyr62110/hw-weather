@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import fr.cvlaminck.hwweather.R
-import fr.cvlaminck.hwweather.data.model.HourlyForecast
+import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
 
 class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     init {
@@ -20,7 +20,7 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
     constructor(context: Context) : this(context, null) {
     }
 
-    var hourlyForecast: HourlyForecast? = null;
+    var hourlyForecast: HourlyForecastEntity? = null;
 
     private var imgCondition: ImageView? = null;
     private var txtTemperature: TextView? = null;
