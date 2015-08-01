@@ -30,7 +30,7 @@ public class CityForecastFragment : Fragment() {
         super.onAttach(activity)
         if (forecastServiceConnection == null) {
             forecastServiceConnection = ForecastServiceConnection();
-            val bindIntent = Intent(activity, javaClass<ForecastServiceImpl>);
+            val bindIntent = Intent(activity, javaClass<ForecastServiceImpl>());
             activity!!.bindService(bindIntent, forecastServiceConnection, Context.BIND_AUTO_CREATE);
         }
     }

@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
+import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
 
 class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     init {
+        (context.getApplicationContext() as HwWeatherApplication).component().inject(this);
+
         setContentView();
         bindViews();
         updateViews();
@@ -19,6 +23,8 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
 
     constructor(context: Context) : this(context, null) {
     }
+
+    var iconSetManager: IconSetManager? = null;
 
     var hourlyForecast: HourlyForecastEntity? = null;
 
@@ -41,8 +47,12 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
     }
 
     private fun updateViews() {
-        imgCondition!!.setImageResource(R.mipmap.sun);
-        txtTemperature!!.setText("39°C");
+        if (hourlyForecast != null) {
+            val weatherConditionDrawable = iconSetManager!!.getIconForWeatherCondition(hourlyForecast!!.condition);
+
+            imgCondition!!.setImageDrawable(weatherConditionDrawable);
+            txtTemperature!!.setText("13");
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package fr.cvlaminck.hwweather.model
+package fr.cvlaminck.hwweather.data.model
 
 import fr.cvlaminck.hwweather.data.model.CityEntity
 

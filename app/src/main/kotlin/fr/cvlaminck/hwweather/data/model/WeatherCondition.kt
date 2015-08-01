@@ -1,4 +1,4 @@
-package fr.cvlaminck.hwweather.model
+package fr.cvlaminck.hwweather.data.model
 
 enum class WeatherCondition {
     CLEAR,

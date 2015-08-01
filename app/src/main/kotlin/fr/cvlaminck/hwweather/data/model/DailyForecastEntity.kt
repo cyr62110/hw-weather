@@ -1,6 +1,6 @@
 package fr.cvlaminck.hwweather.data.model
 
-import fr.cvlaminck.hwweather.model.WeatherCondition
+import fr.cvlaminck.hwweather.data.model.WeatherCondition
 import java.util.*
 
 @data class DailyForecastEntity(

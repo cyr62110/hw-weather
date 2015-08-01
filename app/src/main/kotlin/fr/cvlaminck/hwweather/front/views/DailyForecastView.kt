@@ -7,16 +7,25 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
+import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.data.model.DailyForecastEntity
+import fr.cvlaminck.hwweather.data.model.WeatherCondition
 import kotlinx.android.synthetic.dailyforecastview.*;
+import javax.inject.Inject
 
 class DailyForecastView(context: Context) : LinearLayout(context) {
     init {
+        (context.getApplicationContext() as HwWeatherApplication).component().inject(this);
+
         setContentView();
         bindViews();
         updateViews();
     }
+
+    @Inject @publicField
+    var iconSetManager: IconSetManager? = null;
 
     var forecast : DailyForecastEntity? = null;
 
@@ -41,6 +50,7 @@ class DailyForecastView(context: Context) : LinearLayout(context) {
     }
 
     fun updateViews() {
+        imgCondition!!.setImageDrawable(iconSetManager!!.getThumbnailForWeatherCondition(WeatherCondition.CLEAR));
         txtMinTemperature!!.setText("12");
         txtMaxTemperature!!.setText("13");
         txtDay!!.setText("Tue");

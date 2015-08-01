@@ -1,6 +1,8 @@
 package fr.cvlaminck.hwweather.data.model
 
-import fr.cvlaminck.hwweather.model.WeatherCondition
+import android.os.Parcel
+import android.os.Parcelable
+import fr.cvlaminck.hwweather.data.model.WeatherCondition
 import java.util.Date
 
 public class HourlyForecastEntity(
@@ -9,4 +11,5 @@ public class HourlyForecastEntity(
         val condition: WeatherCondition,
         val temperature: Double
 ) {
+
 }

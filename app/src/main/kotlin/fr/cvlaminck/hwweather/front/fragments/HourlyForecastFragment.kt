@@ -20,7 +20,7 @@ public class HourlyForecastFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        val adapter = HourlyForecastPagerAdapter(getActivity(), listOf(HourlyForecastEntity(), HourlyForecastEntity()));
+        val adapter = HourlyForecastPagerAdapter(getActivity(), listOf<HourlyForecastEntity>());
         vpHourlyForecast.setAdapter(adapter);
         cslHour.setOnCircleSliderLayoutChangeListener(OnCircleSliderLayoutChangeListener());
     }

@@ -32,7 +32,7 @@ public class ForecastActivity : FragmentActivity() {
 
     private fun initViewPager() {
         val cities = cityManager!!.getCities();
-        val adapter = CityForecastFragmentPagerAdapter(this.getSupportFragmentManager(), cities);
+        val adapter = CityForecastFragmentPagerAdapter(this, getSupportFragmentManager());
         vpForecast.setAdapter(adapter);
     }
 }
