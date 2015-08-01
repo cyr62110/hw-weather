@@ -8,3 +8,6 @@ build
 
 #Not commited since I have no license to use those icons
 /app/mipmap
+app/src/main/res/mipmap/clouds.png
+app/src/main/res/mipmap/moon.png
+app/src/main/res/mipmap/sun.png
