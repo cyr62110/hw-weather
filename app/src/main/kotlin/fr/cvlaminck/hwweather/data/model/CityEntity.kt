@@ -1,21 +1,33 @@
 package fr.cvlaminck.hwweather.data.model
 
-import android.database.Cursor
-import fr.cvlaminck.hwweather.data.tables.CityTableColumns
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+import fr.cvlaminck.hwweather.data.dao.CityRepository
 
-public class CityEntity(
-        val name: String,
-        val county: String?,
-        val state: String?,
-        val country: String
-) {
-    companion object {
-        fun fromCursor(cursor: Cursor) : CityEntity {
-            val name = cursor.getString(cursor.getColumnIndex(CityTableColumns.name));
-            val county = cursor.getString(cursor.getColumnIndex(CityTableColumns.county));
-            val state = cursor.getString(cursor.getColumnIndex(CityTableColumns.state));
-            val country = cursor.getString(cursor.getColumnIndex(CityTableColumns.country));
-            return CityEntity(name, county, state, country);
-        }
-    }
+@DatabaseTable(daoClass = CityRepository::class)
+public class CityEntity : Cacheable {
+
+    @DatabaseField(generatedId = true)
+    var id: Int? = null;
+
+    @DatabaseField
+    var name: String? = null;
+
+    @DatabaseField
+    var county: String? = null;
+
+    @DatabaseField
+    var state: String? = null;
+
+    @DatabaseField
+    var country: String? = null;
+
+    @DatabaseField
+    override var cacheTimestamp: Long = System.currentTimeMillis();
+
+    @DatabaseField
+    override var expiryInSecond: Int = Cacheable.ONE_HOUR;
+
+    @DatabaseField
+    override var gracePeriodInSecond: Int = Cacheable.HALF_A_HOUR;
 }

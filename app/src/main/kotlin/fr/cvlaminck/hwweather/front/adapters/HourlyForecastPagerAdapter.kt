@@ -2,11 +2,8 @@ package fr.cvlaminck.hwweather.front.adapters
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView
 

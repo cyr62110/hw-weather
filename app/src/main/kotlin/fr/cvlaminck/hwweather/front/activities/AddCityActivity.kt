@@ -5,5 +5,4 @@ import android.app.Activity
 public class AddCityActivity : Activity() {
 
 
-
 }

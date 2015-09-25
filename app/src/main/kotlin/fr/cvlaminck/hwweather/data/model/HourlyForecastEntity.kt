@@ -1,15 +1,25 @@
 package fr.cvlaminck.hwweather.data.model
 
-import android.os.Parcel
-import android.os.Parcelable
-import fr.cvlaminck.hwweather.data.model.WeatherCondition
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+import fr.cvlaminck.hwweather.data.dao.HourlyForecastRepository
 import java.util.Date
 
-public class HourlyForecastEntity(
-        val hour: Date,
-        val city: CityEntity,
-        val condition: WeatherCondition,
-        val temperature: Double
-) {
+@DatabaseTable(daoClass = HourlyForecastRepository::class)
+public class HourlyForecastEntity {
 
+    @DatabaseField(generatedId = true)
+    var id: Int? = null;
+
+    @DatabaseField
+    var hour: Date = Date();
+
+    @DatabaseField(foreign = true)
+    var city: CityEntity? = null;
+
+    @DatabaseField
+    var condition: WeatherCondition = WeatherCondition.CLEAR;
+
+    @DatabaseField
+    var temperature: Double = 0.0;
 }

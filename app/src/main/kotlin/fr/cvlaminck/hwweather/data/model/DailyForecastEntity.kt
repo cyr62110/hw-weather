@@ -1,14 +1,36 @@
 package fr.cvlaminck.hwweather.data.model
 
-import fr.cvlaminck.hwweather.data.model.WeatherCondition
-import java.util.*
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+import fr.cvlaminck.hwweather.data.dao.DailyForecastRepository
+import java.util.Date
 
-@data class DailyForecastEntity(
-        val day: Date,
-        val city: CityEntity,
-        val condition: WeatherCondition,
-        val temperatureMin: Double,
-        val temperatureMax: Double
-) {
+@DatabaseTable(daoClass = DailyForecastRepository::class)
+class DailyForecastEntity : Cacheable {
+    @DatabaseField(generatedId = true)
+    var id: Int? = null;
 
+    @DatabaseField
+    var day: Date = Date();
+
+    @DatabaseField(generatedId = true)
+    var city: CityEntity? = null;
+
+    @DatabaseField
+    var condition: WeatherCondition = WeatherCondition.CLEAR;
+
+    @DatabaseField
+    var temperatureMin: Double = 0.0;
+
+    @DatabaseField
+    var temperatureMax: Double = 0.0;
+
+    @DatabaseField
+    override var cacheTimestamp: Long = System.currentTimeMillis();
+
+    @DatabaseField
+    override var expiryInSecond: Int = Cacheable.ONE_HOUR;
+
+    @DatabaseField
+    override var gracePeriodInSecond: Int = Cacheable.HALF_A_HOUR;
 }

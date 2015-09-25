@@ -11,10 +11,11 @@ import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
+import javax.inject.Inject
 
 class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     init {
-        (context.getApplicationContext() as HwWeatherApplication).component().inject(this);
+        (context.applicationContext as HwWeatherApplication).component().inject(this);
 
         setContentView();
         bindViews();
@@ -24,17 +25,16 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
     constructor(context: Context) : this(context, null) {
     }
 
-    var iconSetManager: IconSetManager? = null;
+    @Inject
+    lateinit val iconSetManager: IconSetManager;
 
     var hourlyForecast: HourlyForecastEntity? = null;
 
     private var imgCondition: ImageView? = null;
     private var txtTemperature: TextView? = null;
 
-
-
     private fun setContentView() {
-        val layoutInflater = LayoutInflater.from(getContext());
+        val layoutInflater = LayoutInflater.from(context);
         val contextView: ViewGroup = layoutInflater.inflate(R.layout.hourlyforecastview, null) as ViewGroup;
         val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -48,10 +48,10 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
 
     private fun updateViews() {
         if (hourlyForecast != null) {
-            val weatherConditionDrawable = iconSetManager!!.getIconForWeatherCondition(hourlyForecast!!.condition);
+            val weatherConditionDrawable = iconSetManager.getIconForWeatherCondition(hourlyForecast!!.condition);
 
             imgCondition!!.setImageDrawable(weatherConditionDrawable);
-            txtTemperature!!.setText("13");
+            txtTemperature!!.text = "13";
         }
     }
 

@@ -26,10 +26,10 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.0.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
-    compile 'joda-time:joda-time:2.8.1'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'com.j256.ormlite:ormlite-core:4.48'
 
-    compile 'net.simonvt.schematic:schematic:0.6.2'
-    kapt 'net.simonvt.schematic:schematic-compiler:0.6.2'
+    compile 'joda-time:joda-time:2.8.1'
 
     compile "com.android.support:support-v4:+"
 }

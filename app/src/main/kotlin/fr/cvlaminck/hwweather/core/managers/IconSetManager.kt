@@ -2,8 +2,8 @@ package fr.cvlaminck.hwweather.core.managers
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import fr.cvlaminck.hwweather.data.model.WeatherCondition
 import fr.cvlaminck.hwweather.R
+import fr.cvlaminck.hwweather.data.model.WeatherCondition
 
 
 public class IconSetManager(

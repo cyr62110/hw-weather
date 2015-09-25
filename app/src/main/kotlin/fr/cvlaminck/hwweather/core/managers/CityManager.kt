@@ -1,13 +1,13 @@
 package fr.cvlaminck.hwweather.core.managers
 
+import fr.cvlaminck.hwweather.data.dao.CityRepository
 import fr.cvlaminck.hwweather.data.model.CityEntity
-import java.util.Arrays
 import javax.inject.Inject
 
-public class CityManager @Inject constructor() {
+public class CityManager @Inject constructor(
+        private val cityRepository: CityRepository
+) {
 
-    fun getCities() : List<CityEntity> {
-        return listOf(CityEntity("Paris", null, null, "France"));
-    }
+    fun getCities(): List<CityEntity> = cityRepository.queryForAll();
 
 }

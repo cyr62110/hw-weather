@@ -2,7 +2,6 @@ package fr.cvlaminck.hwweather.front.views
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,7 +11,6 @@ import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.data.model.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.WeatherCondition
-import kotlinx.android.synthetic.dailyforecastview.*;
 import javax.inject.Inject
 
 class DailyForecastView(context: Context) : LinearLayout(context) {
@@ -24,15 +22,15 @@ class DailyForecastView(context: Context) : LinearLayout(context) {
         updateViews();
     }
 
-    @Inject @publicField
-    var iconSetManager: IconSetManager? = null;
+    @Inject
+    lateinit val iconSetManager: IconSetManager;
 
-    var forecast : DailyForecastEntity? = null;
+    var forecast: DailyForecastEntity? = null;
 
-    var imgCondition : ImageView? = null;
-    var txtMinTemperature : TextView? = null;
-    var txtMaxTemperature : TextView? = null;
-    var txtDay : TextView? = null;
+    var imgCondition: ImageView? = null;
+    var txtMinTemperature: TextView? = null;
+    var txtMaxTemperature: TextView? = null;
+    var txtDay: TextView? = null;
 
     private fun setContentView() {
         val layoutInflater = LayoutInflater.from(getContext());

@@ -89,6 +89,8 @@ public class CircleSliderLayout
      */
     private int secondaryProgressWidth;
 
+    private boolean touchToSeekEnabled = true;
+
     private OnCircleSliderLayoutChangeListener changeListener = null;
 
     private Drawable thumb;
@@ -153,6 +155,8 @@ public class CircleSliderLayout
         thumb = null;
         thumbTint = ColorStateList.valueOf(progressTint);
         thumbTintMode = PorterDuff.Mode.DST;
+
+        touchToSeekEnabled = true;
     }
 
     private int dipToPixels(float dip, DisplayMetrics displayMetrics) {
@@ -195,6 +199,8 @@ public class CircleSliderLayout
         } else {
             thumbTintMode = null;
         }
+
+        touchToSeekEnabled = a.getBoolean(R.styleable.CircleSliderLayout_touchToSeekEnabled, true);
 
         setProgressMaxValue(progressMaxValue);
         setSecondaryProgressMaxValue(secondProgressMaxValue);
@@ -393,7 +399,7 @@ public class CircleSliderLayout
 
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                if (isTouchEventOnThumb(coords)) {
+                if (touchToSeekEnabled || isTouchEventOnThumb(coords)) {
                     setPressed(true);
                     setDragging(true);
                     trackTouchEvent(ev, coords);

@@ -9,7 +9,8 @@ import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.adapters.HourlyForecastPagerAdapter
 import fr.cvlaminck.hwweather.views.CircleSliderLayout
-import kotlinx.android.synthetic.hourlyforecastfragment.*;
+import kotlinx.android.synthetic.hourlyforecastfragment.cslHour
+import kotlinx.android.synthetic.hourlyforecastfragment.vpHourlyForecast
 
 public class HourlyForecastFragment : Fragment() {
 
