@@ -13,6 +13,7 @@ public class HwWeatherApplication extends Application {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
                 .androidModule(new AndroidModule(this))
+                .coreModule(new CoreModule())
                 .dataModule(new DataModule(new HwWeatherDBOpenHelper(this)))
                 .build();
     }

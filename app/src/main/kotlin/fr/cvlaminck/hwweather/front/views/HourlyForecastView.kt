@@ -26,7 +26,7 @@ class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(
     }
 
     @Inject
-    lateinit val iconSetManager: IconSetManager;
+    lateinit var iconSetManager: IconSetManager;
 
     var hourlyForecast: HourlyForecastEntity? = null;
 

@@ -23,7 +23,7 @@ class DailyForecastView(context: Context) : LinearLayout(context) {
     }
 
     @Inject
-    lateinit val iconSetManager: IconSetManager;
+    lateinit var iconSetManager: IconSetManager;
 
     var forecast: DailyForecastEntity? = null;
 

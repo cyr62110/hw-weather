@@ -1,6 +1,19 @@
 allprojects {
     ext {
         kotlinVersion='0.1-SNAPSHOT'
-        springBootVersion = '1.2.5.RELEASE'
+        hwWeatherVersion = '0.2'
+        ormLiteVersion = '4.48'
+        supportLibraryVersion = '23.0.0'
+    }
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
+        maven {
+            url 'https://dl.bintray.com/cyr62110/maven'
+        }
     }
 }

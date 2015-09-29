@@ -9,7 +9,7 @@ import fr.cvlaminck.hwweather.front.views.DailyForecastView;
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView;
 
 @Singleton
-@Component(modules = {AndroidModule.class, DataModule.class})
+@Component(modules = {AndroidModule.class, CoreModule.class, DataModule.class})
 public interface ApplicationComponent {
     void inject(ForecastActivity activity);
 

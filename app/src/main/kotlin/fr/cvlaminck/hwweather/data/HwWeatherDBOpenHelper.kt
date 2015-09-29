@@ -19,7 +19,7 @@ public class HwWeatherDBOpenHelper(context: Context) : OrmLiteSqliteOpenHelper(c
     override fun onCreate(database: SQLiteDatabase?, connectionSource: ConnectionSource?) {
         val entityClasses = listOf(CityEntity::class, WeatherEntity::class, DailyForecastEntity::class, HourlyForecastEntity::class);
         for(entityClass in entityClasses) {
-            TableUtils.createTableIfNotExists(connectionSource, entityClass.javaClass);
+            TableUtils.createTableIfNotExists(connectionSource, entityClass.java);
         }
     }
 

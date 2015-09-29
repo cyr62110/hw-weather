@@ -13,7 +13,7 @@ class DailyForecastEntity : Cacheable {
     @DatabaseField
     var day: Date = Date();
 
-    @DatabaseField(generatedId = true)
+    @DatabaseField(foreign = true)
     var city: CityEntity? = null;
 
     @DatabaseField

@@ -12,7 +12,8 @@ import javax.inject.Inject
 
 public class ForecastActivity : FragmentActivity() {
 
-    lateinit val cityManager: CityManager;
+    @Inject
+    lateinit var cityManager: CityManager;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -24,8 +25,8 @@ public class ForecastActivity : FragmentActivity() {
     }
 
     private fun initViewPager() {
-        val cities = cityManager!!.getCities();
-        val adapter = CityForecastFragmentPagerAdapter(this, getSupportFragmentManager());
+        val cities = cityManager.getCities();
+        val adapter = CityForecastFragmentPagerAdapter(this, supportFragmentManager);
         adapter.cities = cities;
         vpForecast.setAdapter(adapter);
     }
