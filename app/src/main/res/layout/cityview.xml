@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="2dp"
+    app:cardMaxElevation="2dp"
+    app:contentPadding="@dimen/padding_large">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+
+            android:id="@+id/txtCityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Paris"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="@dimen/textSize_xlarge"
+            />
+
+        <TextView
+            android:id="@+id/txtCityCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtCityName"
+
+            android:text="France"
+            android:textColor="?android:textColorSecondary"
+            />
+
+        <!-- TODO implements later
+        <TextView
+            android:id="@+id/txtCityDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/txtCityCountry"
+            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@id/txtCityCountry"
+
+            android:text="0.5km"
+            android:gravity="right"
+            android:textColor="?android:textColorSecondaryInverse"
+            /> -->
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
