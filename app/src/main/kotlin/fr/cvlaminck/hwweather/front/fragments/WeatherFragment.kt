@@ -11,21 +11,22 @@ import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.managers.WeatherManager
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
 
 public class WeatherFragment() : Fragment() {
     companion object {
         private val BUNDLE_ARGUMENTS_CITY = "city";
-        fun newInstance(context: Context, city: CityEntity): Fragment {
+        fun newInstance(context: Context, city: CityEntity): WeatherFragment {
             val fg = WeatherFragment();
-            (context.applicationContext as HwWeatherApplication).component().inject(fg);
+            setCity(fg, city);
+            return fg;
+        }
 
+        private fun setCity(fg: Fragment, city: CityEntity) {
             val args = Bundle();
             args.putParcelable(BUNDLE_ARGUMENTS_CITY, city);
             fg.arguments = args;
-
-            return fg;
         }
     }
 
@@ -49,8 +50,9 @@ public class WeatherFragment() : Fragment() {
         _city = null;
     }
 
-    override fun onAttach(activity: Activity?) {
+    override fun onAttach(activity: Activity) {
         super.onAttach(activity)
+        (activity.application as HwWeatherApplication).component().inject(this);
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =

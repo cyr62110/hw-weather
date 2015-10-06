@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
-import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView
 
 public class HourlyForecastPagerAdapter(

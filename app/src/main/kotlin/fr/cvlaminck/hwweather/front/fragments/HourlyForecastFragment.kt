@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import fr.cvlaminck.hwweather.R
-import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.adapters.HourlyForecastPagerAdapter
 import fr.cvlaminck.hwweather.views.CircleSliderLayout
 import kotlinx.android.synthetic.hourlyforecastfragment.cslHour

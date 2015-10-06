@@ -2,6 +2,7 @@ package fr.cvlaminck.hwweather.front.activities
 
 import android.app.Activity
 import android.app.LoaderManager
+import android.content.Intent
 import android.content.Loader
 import android.os.Bundle
 import android.view.View
@@ -16,7 +17,7 @@ import fr.cvlaminck.hwweather.core.loaders.SearchCityLoader
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.model.Page
 import fr.cvlaminck.hwweather.core.model.city.CityPageSet
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.front.viewholders.CityViewHolder
 import kotlinx.android.synthetic.searchcityactivity.rvCities
 import kotlinx.android.synthetic.searchcityactivity.svCity
@@ -91,6 +92,7 @@ public class SearchCityActivity : Activity() {
     private fun updateResults(results: CityPageSet) {
         this.results = results;
         val adapter = EfficientRecyclerAdapter<CityEntity>(R.layout.cityview, CityViewHolder::class.java, results.results);
+        adapter.setOnItemClickListener(rvCitiesOnItemClickListener);
         rvCities.adapter = adapter;
     }
 
@@ -123,7 +125,9 @@ public class SearchCityActivity : Activity() {
 
     private val rvCitiesOnItemClickListener = object: EfficientAdapter.OnItemClickListener<CityEntity> {
         override fun onItemClick(adapter: EfficientAdapter<CityEntity>, view: View, city: CityEntity, position: Int) {
-
+            val intent = Intent(this@SearchCityActivity, WeatherActivity::class.java);
+            intent.putExtra(WeatherActivity.INTENT_CITY, city);
+            startActivity(intent);
         }
     }
 

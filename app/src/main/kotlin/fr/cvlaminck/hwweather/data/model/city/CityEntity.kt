@@ -1,17 +1,18 @@
-package fr.cvlaminck.hwweather.data.model
+package fr.cvlaminck.hwweather.data.model.city
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import fr.cvlaminck.hwweather.client.resources.CityResource
-import fr.cvlaminck.hwweather.data.dao.CityRepository
+import fr.cvlaminck.hwweather.data.dao.city.CityRepository
 
-@DatabaseTable(daoClass = CityRepository::class)
+@DatabaseTable(tableName = "city", daoClass = CityRepository::class)
 public class CityEntity public constructor() : Parcelable {
 
     public constructor(resource: CityResource) : this() {
         serverId = resource.id;
+        resource.externalId
         name = resource.name;
         country = resource.country;
     }
@@ -30,6 +31,8 @@ public class CityEntity public constructor() : Parcelable {
 
     @DatabaseField
     var serverId: String? = null;
+
+    var serverExternalIds: MutableList<ExternalCityIdEntity> = arrayListOf();
 
     @DatabaseField
     var name: String? = null;

@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import fr.cvlaminck.hwweather.core.model.Page
 import fr.cvlaminck.hwweather.core.model.PageSet
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import java.util.*
 
 public class CityPageSet(

@@ -5,8 +5,8 @@ import com.j256.ormlite.support.ConnectionSource
 import dagger.Module
 import dagger.Provides
 import fr.cvlaminck.hwweather.data.HwWeatherDBOpenHelper
-import fr.cvlaminck.hwweather.data.dao.CityRepository
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.dao.city.CityRepository
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Singleton
 
 @Module

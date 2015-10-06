@@ -5,8 +5,8 @@ import fr.cvlaminck.hwweather.client.HwWeatherClient
 import fr.cvlaminck.hwweather.core.converters.CityConverter
 import fr.cvlaminck.hwweather.core.loaders.SearchCityLoader
 import fr.cvlaminck.hwweather.core.model.Page
-import fr.cvlaminck.hwweather.data.dao.CityRepository
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.dao.city.CityRepository
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
 
 public class CityManager @Inject constructor(

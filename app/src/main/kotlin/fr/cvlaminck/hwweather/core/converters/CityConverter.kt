@@ -1,7 +1,7 @@
 package fr.cvlaminck.hwweather.core.converters
 
 import fr.cvlaminck.hwweather.client.resources.CityResource
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
 
 public class CityConverter public @Inject constructor() {

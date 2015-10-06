@@ -1,19 +1,21 @@
-package fr.cvlaminck.hwweather.data.model
+package fr.cvlaminck.hwweather.data.model.weather
 
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import fr.cvlaminck.hwweather.data.dao.DailyForecastRepository
+import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
+import fr.cvlaminck.hwweather.data.model.Cacheable
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import java.util.Date
 
-@DatabaseTable(daoClass = DailyForecastRepository::class)
+@DatabaseTable(tableName = "daily", daoClass = DailyForecastRepository::class)
 class DailyForecastEntity : Cacheable {
     @DatabaseField(generatedId = true)
     var id: Int? = null;
 
-    @DatabaseField
+    @DatabaseField(index = true)
     var day: Date = Date();
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, index = true)
     var city: CityEntity? = null;
 
     @DatabaseField

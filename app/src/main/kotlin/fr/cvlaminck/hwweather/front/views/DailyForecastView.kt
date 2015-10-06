@@ -9,8 +9,8 @@ import android.widget.TextView
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
-import fr.cvlaminck.hwweather.data.model.DailyForecastEntity
-import fr.cvlaminck.hwweather.data.model.WeatherCondition
+import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
 import javax.inject.Inject
 
 class DailyForecastView(context: Context) : LinearLayout(context) {

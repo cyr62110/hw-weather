@@ -1,11 +1,12 @@
-package fr.cvlaminck.hwweather.data.model
+package fr.cvlaminck.hwweather.data.model.weather
 
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import fr.cvlaminck.hwweather.data.dao.HourlyForecastRepository
+import fr.cvlaminck.hwweather.data.dao.weather.HourlyForecastRepository
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import java.util.Date
 
-@DatabaseTable(daoClass = HourlyForecastRepository::class)
+@DatabaseTable(tableName = "hourly", daoClass = HourlyForecastRepository::class)
 public class HourlyForecastEntity {
 
     @DatabaseField(generatedId = true)

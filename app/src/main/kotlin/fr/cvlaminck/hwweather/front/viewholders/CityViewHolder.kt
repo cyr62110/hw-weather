@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.skocken.efficientadapter.lib.viewholder.EfficientViewHolder
 import fr.cvlaminck.hwweather.R
-import fr.cvlaminck.hwweather.data.model.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 
 class CityViewHolder(
         itemView: View

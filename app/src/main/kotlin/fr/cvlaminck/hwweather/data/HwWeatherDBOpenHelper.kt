@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
-import fr.cvlaminck.hwweather.data.model.CityEntity
-import fr.cvlaminck.hwweather.data.model.DailyForecastEntity
-import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
-import fr.cvlaminck.hwweather.data.model.WeatherEntity
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
+import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.WeatherEntity
 
 public class HwWeatherDBOpenHelper(context: Context) : OrmLiteSqliteOpenHelper(context, HwWeatherDBOpenHelper.DATABASE_NAME, null, HwWeatherDBOpenHelper.VERSION) {
     companion object {

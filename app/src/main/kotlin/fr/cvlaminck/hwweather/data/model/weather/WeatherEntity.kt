@@ -1,10 +1,11 @@
-package fr.cvlaminck.hwweather.data.model
+package fr.cvlaminck.hwweather.data.model.weather
 
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import fr.cvlaminck.hwweather.data.dao.WeatherRepository
+import fr.cvlaminck.hwweather.data.dao.weather.WeatherRepository
+import fr.cvlaminck.hwweather.data.model.city.CityEntity
 
-@DatabaseTable(daoClass = WeatherRepository::class)
+@DatabaseTable(tableName = "current", daoClass = WeatherRepository::class)
 public class WeatherEntity {
 
     @DatabaseField(generatedId = true)

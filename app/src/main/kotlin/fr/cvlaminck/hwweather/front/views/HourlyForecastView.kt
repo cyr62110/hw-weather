@@ -10,7 +10,7 @@ import android.widget.TextView
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
-import fr.cvlaminck.hwweather.data.model.HourlyForecastEntity
+import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import javax.inject.Inject
 
 class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
