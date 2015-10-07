@@ -17,13 +17,18 @@ public class CityEntity public constructor() : Parcelable {
         country = resource.country;
     }
 
-    public constructor(source: Parcel?) : this() {
-        if (source?.readInt() == 1) {
-            id = source?.readInt();
+    public constructor(source: Parcel) : this() {
+        if (source.readInt() == 1) {
+            id = source.readInt();
         }
-        serverId = source?.readString();
-        name = source?.readString();
-        country = source?.readString();
+        if (source.readInt() == 1) {
+            serverId = source.readString();
+        }
+        if (source.readInt() == 1) {
+            serverExternalId = source.readParcelable(ExternalCityIdEntity::class.java.classLoader);
+        }
+        name = source.readString();
+        country = source.readString();
     }
 
     @DatabaseField(generatedId = true)
@@ -32,7 +37,7 @@ public class CityEntity public constructor() : Parcelable {
     @DatabaseField
     var serverId: String? = null;
 
-    var serverExternalIds: MutableList<ExternalCityIdEntity> = arrayListOf();
+    var serverExternalId: ExternalCityIdEntity? = null;
 
     @DatabaseField
     var name: String? = null;
@@ -40,22 +45,29 @@ public class CityEntity public constructor() : Parcelable {
     @DatabaseField
     var country: String? = null;
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(if (id != null) 1 else 0);
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(if (id != null) 1 else 0);
         if (id != null) {
-            dest?.writeInt(id as Int);
+            dest.writeInt(id as Int);
         }
-        dest?.writeString(serverId);
-        dest?.writeString(name);
-        dest?.writeString(country);
+        dest.writeInt(if (serverId != null) 1 else 0)
+        if (serverId != null) {
+            dest.writeString(serverId);
+        }
+        dest.writeInt(if (serverExternalId != null) 1 else 0);
+        if (serverExternalId != null) {
+            dest.writeParcelable(serverExternalId, flags);
+        }
+        dest.writeString(name);
+        dest.writeString(country);
     }
 
     override fun describeContents(): Int = 0;
 
     companion object {
         val CREATOR = object : Parcelable.Creator<CityEntity> {
-            override fun createFromParcel(source: Parcel?): CityEntity? = CityEntity(source);
-            override fun newArray(size: Int): Array<out CityEntity>? = arrayOfNulls<CityEntity?>(size) as Array<out CityEntity>?;
+            override fun createFromParcel(source: Parcel): CityEntity = CityEntity(source);
+            override fun newArray(size: Int): Array<CityEntity?> = arrayOfNulls<CityEntity?>(size);
         };
     }
 }
