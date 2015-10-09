@@ -5,7 +5,7 @@ import android.os.Bundle
 
 import fr.cvlaminck.hwweather.R
 
-class HomeActivity : Activity() {
+public class HomeActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);

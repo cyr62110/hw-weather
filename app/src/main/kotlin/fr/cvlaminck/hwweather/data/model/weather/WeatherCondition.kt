@@ -1,6 +1,6 @@
 package fr.cvlaminck.hwweather.data.model.weather
 
-enum class WeatherCondition {
+public enum class WeatherCondition {
     CLEAR,
     RAIN
 }

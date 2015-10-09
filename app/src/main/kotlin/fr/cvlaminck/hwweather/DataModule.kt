@@ -7,8 +7,10 @@ import dagger.Provides
 import fr.cvlaminck.hwweather.data.HwWeatherDBOpenHelper
 import fr.cvlaminck.hwweather.data.dao.city.CityRepository
 import fr.cvlaminck.hwweather.data.dao.city.ExternalCityIdRepository
+import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
+import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import javax.inject.Singleton
 
 @Module
@@ -22,5 +24,8 @@ public class DataModule(private val helper: HwWeatherDBOpenHelper) {
 
     @Provides
     fun provideExternalCityIdRepository() = helper.getDao(ExternalCityIdEntity::class.java) as ExternalCityIdRepository;
+
+    @Provides
+    fun provideDailyForecastRepository() = helper.getDao(DailyForecastEntity::class.java) as DailyForecastRepository;
 
 }

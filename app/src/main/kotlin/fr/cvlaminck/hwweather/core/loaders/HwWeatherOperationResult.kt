@@ -1,6 +1,6 @@
 package fr.cvlaminck.hwweather.core.loaders
 
-class HwWeatherOperationResult<T> private constructor() {
+public class HwWeatherOperationResult<T> private constructor() {
 
     private var operationResult: T? = null;
     private var failureCause: Exception? = null;

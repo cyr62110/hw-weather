@@ -6,6 +6,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
+import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.WeatherEntity
@@ -17,7 +18,9 @@ public class HwWeatherDBOpenHelper(context: Context) : OrmLiteSqliteOpenHelper(c
     }
 
     override fun onCreate(database: SQLiteDatabase?, connectionSource: ConnectionSource?) {
-        val entityClasses = listOf(CityEntity::class, WeatherEntity::class, DailyForecastEntity::class, HourlyForecastEntity::class);
+        val entityClasses = listOf(
+                CityEntity::class, ExternalCityIdEntity::class,
+                WeatherEntity::class, DailyForecastEntity::class, HourlyForecastEntity::class);
         for(entityClass in entityClasses) {
             TableUtils.createTableIfNotExists(connectionSource, entityClass.java);
         }

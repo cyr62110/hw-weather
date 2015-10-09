@@ -13,7 +13,7 @@ import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import javax.inject.Inject
 
-class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+public class HourlyForecastView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     init {
         (context.applicationContext as HwWeatherApplication).component().inject(this);
 

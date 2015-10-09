@@ -13,7 +13,7 @@ import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
 import javax.inject.Inject
 
-class DailyForecastView(context: Context) : LinearLayout(context) {
+public class DailyForecastView(context: Context) : LinearLayout(context) {
     init {
         (context.getApplicationContext() as HwWeatherApplication).component().inject(this);
 

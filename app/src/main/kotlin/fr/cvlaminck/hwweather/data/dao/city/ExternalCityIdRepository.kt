@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.BaseDaoImpl
 import com.j256.ormlite.support.ConnectionSource
 import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
 
-class ExternalCityIdRepository(
+public class ExternalCityIdRepository (
         connectionSource: ConnectionSource,
         entity: Class<ExternalCityIdEntity>
 ) : BaseDaoImpl<ExternalCityIdEntity, Int> (connectionSource, entity) {

@@ -32,4 +32,11 @@ public class CityConverter public @Inject constructor() {
             resource -> convert(resource);
         }
     }
+
+    fun convert(externalId: ExternalCityIdEntity): ExternalCityIdResource {
+        val resource = ExternalCityIdResource();
+        resource.provider = externalId.provider;
+        resource.id = externalId.externalId;
+        return resource;
+    }
 }

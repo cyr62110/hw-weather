@@ -4,9 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import fr.cvlaminck.hwweather.data.dao.city.ExternalCityIdRepository
 
-@DatabaseTable(tableName = "external_city_id", daoClass = ExternalCityIdEntity::class)
-class ExternalCityIdEntity public constructor() : Parcelable {
+@DatabaseTable(tableName = "external_city_id", daoClass = ExternalCityIdRepository::class)
+public class ExternalCityIdEntity public constructor() : Parcelable {
 
     private constructor(source: Parcel) : this() {
         if (source.readInt() == 1) {

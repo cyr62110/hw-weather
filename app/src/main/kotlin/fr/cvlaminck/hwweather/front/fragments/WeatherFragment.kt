@@ -2,6 +2,7 @@ package fr.cvlaminck.hwweather.front.fragments
 
 import android.app.Activity
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
+import fr.cvlaminck.hwweather.client.resources.weather.enums.WeatherDataType
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.managers.WeatherManager
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
@@ -48,6 +50,8 @@ public class WeatherFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _city = null;
+
+        test.execute(city);
     }
 
     override fun onAttach(activity: Activity) {
@@ -64,5 +68,13 @@ public class WeatherFragment() : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+    }
+
+    val test = object: AsyncTask<CityEntity, Void, Void>() { //FIXME make a proper loader
+        override fun doInBackground(vararg params: CityEntity?): Void? {
+            val city = params.get(0);
+            weatherManager.getWeatherForCity(city as CityEntity, listOf(WeatherDataType.DAILY));
+            return null;
+        }
     }
 }

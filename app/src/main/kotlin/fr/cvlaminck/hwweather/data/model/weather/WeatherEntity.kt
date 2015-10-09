@@ -11,7 +11,7 @@ public class WeatherEntity {
     @DatabaseField(generatedId = true)
     var id: Int? = null;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, unique = true)
     var city: CityEntity? = null;
 
     @DatabaseField

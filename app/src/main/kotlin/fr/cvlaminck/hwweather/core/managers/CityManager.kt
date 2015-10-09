@@ -25,6 +25,10 @@ public class CityManager @Inject constructor(
         return dbExternalId?.city;
     }
 
+    fun save(city: CityEntity): CityEntity {
+        return cityRepository.createIfNotExists(city);
+    }
+
     fun createLoaderForSearch(context: Context, query: String) = SearchCityLoader(context, query, this);
 
     fun search(query: String): Page<CityEntity> {

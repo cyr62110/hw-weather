@@ -7,7 +7,7 @@ import com.skocken.efficientadapter.lib.viewholder.EfficientViewHolder
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 
-class CityViewHolder(
+public class CityViewHolder(
         itemView: View
 ): EfficientViewHolder<CityEntity>(itemView) {
 

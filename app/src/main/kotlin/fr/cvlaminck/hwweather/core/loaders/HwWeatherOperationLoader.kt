@@ -4,7 +4,7 @@ import android.content.AsyncTaskLoader
 import android.content.Context
 import android.content.Loader
 
-abstract class HwWeatherOperationLoader<T> (
+public abstract class HwWeatherOperationLoader<T> (
         context: Context
 ): AsyncTaskLoader<HwWeatherOperationResult<T>> (context) {
 
