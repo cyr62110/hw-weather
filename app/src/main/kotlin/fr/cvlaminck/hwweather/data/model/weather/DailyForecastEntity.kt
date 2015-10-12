@@ -1,15 +1,30 @@
 package fr.cvlaminck.hwweather.data.model.weather
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
 import fr.cvlaminck.hwweather.data.model.Cacheable
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import org.joda.time.DateTime
-import java.util.Date
 
 @DatabaseTable(tableName = "daily", daoClass = DailyForecastRepository::class)
-public class DailyForecastEntity : Cacheable {
+public class DailyForecastEntity public constructor() : Cacheable, Parcelable {
+
+    private constructor(source: Parcel): this() {
+        city = CityEntity();
+
+        id = source.readInt();
+        day = DateTime.parse(source.readString());
+        city!!.id = source.readInt();
+        // weather condition
+        minTemperatureInCelsius = source.readDouble();
+        maxTemperatureInCelsius = source.readDouble();
+        cacheDate = DateTime.parse(source.readString());
+        expiryInSecond = source.readInt();
+    }
+
     @DatabaseField(generatedId = true)
     var id: Int? = null;
 
@@ -32,5 +47,24 @@ public class DailyForecastEntity : Cacheable {
     override var cacheDate: DateTime = DateTime.now();
 
     @DatabaseField
-    override var expiryInSecond: Int = Cacheable.ONE_HOUR;
+    override var expiryInSecond: Int = Cacheable.SIX_HOUR;
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(id as Int);
+        dest.writeString(day.toString());
+        // weather condition
+        dest.writeDouble(minTemperatureInCelsius);
+        dest.writeDouble(maxTemperatureInCelsius);
+        dest.writeString(cacheDate.toString());
+        dest.writeInt(expiryInSecond);
+    }
+
+    override fun describeContents(): Int = 0;
+
+    companion object {
+        val CREATOR = object : Parcelable.Creator<DailyForecastEntity> {
+            override fun createFromParcel(source: Parcel): DailyForecastEntity = DailyForecastEntity(source);
+            override fun newArray(size: Int): Array<DailyForecastEntity?> = arrayOfNulls<DailyForecastEntity?>(size);
+        };
+    }
 }

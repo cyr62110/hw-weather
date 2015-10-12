@@ -7,7 +7,7 @@ import fr.cvlaminck.hwweather.client.resources.weather.WeatherConditionResource
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
-import fr.cvlaminck.hwweather.data.model.weather.WeatherEntity
+import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -34,8 +34,8 @@ public class WeatherConverter public @Inject constructor() {
         return entity;
     }
 
-    fun convert(current: CurrentWeatherResource): WeatherEntity {
-        val entity = WeatherEntity();
+    fun convert(current: CurrentWeatherResource): CurrentWeatherEntity {
+        val entity = CurrentWeatherEntity();
         entity.temperature = current.temperatureInCelsius;
         entity.condition = convert(current.weatherCondition);
         return entity;

@@ -1,8 +1,7 @@
 package fr.cvlaminck.hwweather.core.loaders
 
-import android.content.AsyncTaskLoader
 import android.content.Context
-import android.content.Loader
+import android.support.v4.content.AsyncTaskLoader
 
 public abstract class HwWeatherOperationLoader<T> (
         context: Context
@@ -12,7 +11,7 @@ public abstract class HwWeatherOperationLoader<T> (
     private var result: HwWeatherOperationResult<T>? = null;
 
     override fun loadInBackground(): HwWeatherOperationResult<T> {
-        return try {
+        try {
             val requestResult = doRequest();
             return HwWeatherOperationResult(requestResult);
         } catch (ex: Exception) {

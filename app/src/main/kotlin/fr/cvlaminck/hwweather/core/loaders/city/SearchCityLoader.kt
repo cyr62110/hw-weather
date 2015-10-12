@@ -1,6 +1,7 @@
-package fr.cvlaminck.hwweather.core.loaders
+package fr.cvlaminck.hwweather.core.loaders.city
 
 import android.content.Context
+import fr.cvlaminck.hwweather.core.loaders.HwWeatherOperationLoader
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.model.Page
 import fr.cvlaminck.hwweather.data.model.city.CityEntity

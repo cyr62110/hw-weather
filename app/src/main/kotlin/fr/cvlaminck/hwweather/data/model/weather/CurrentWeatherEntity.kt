@@ -4,23 +4,22 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import fr.cvlaminck.hwweather.data.dao.weather.HourlyForecastRepository
+import fr.cvlaminck.hwweather.data.dao.weather.CurrentWeatherRepository
 import fr.cvlaminck.hwweather.data.model.Cacheable
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import org.joda.time.DateTime
-import java.util.Date
+import org.joda.time.Instant
 
-@DatabaseTable(tableName = "hourly", daoClass = HourlyForecastRepository::class)
-public class HourlyForecastEntity public constructor(): Cacheable, Parcelable {
+@DatabaseTable(tableName = "current", daoClass = CurrentWeatherRepository::class)
+public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
 
     private constructor(source: Parcel): this() {
         city = CityEntity();
 
         id = source.readInt();
-        hour = DateTime.parse(source.readString());
         city!!.id = source.readInt();
-        // weather condition
         temperature = source.readDouble();
+        // weather condition
         cacheDate = DateTime.parse(source.readString());
         expiryInSecond = source.readInt();
     }
@@ -28,28 +27,25 @@ public class HourlyForecastEntity public constructor(): Cacheable, Parcelable {
     @DatabaseField(generatedId = true)
     var id: Int? = null;
 
-    @DatabaseField(index = true, uniqueCombo = true)
-    var hour: DateTime? = null;
-
-    @DatabaseField(foreign = true, index = true, uniqueCombo = true)
+    @DatabaseField(foreign = true, unique = true)
     var city: CityEntity? = null;
-
-    @DatabaseField
-    var condition: WeatherCondition = WeatherCondition.CLEAR;
 
     @DatabaseField
     var temperature: Double = 0.0;
 
     @DatabaseField
+    var condition: WeatherCondition = WeatherCondition.CLEAR;
+
+    @DatabaseField
     override var cacheDate: DateTime = DateTime.now();
 
     @DatabaseField
-    override var expiryInSecond: Int = Cacheable.ONE_HOUR;
+    override var expiryInSecond: Int = Cacheable.HALF_HOUR;
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id as Int);
-        dest.writeString(hour.toString());
         dest.writeInt(city?.id as Int);
+        dest.writeDouble(temperature);
         // weather condition
         dest.writeString(cacheDate.toString());
         dest.writeInt(expiryInSecond);
@@ -58,9 +54,9 @@ public class HourlyForecastEntity public constructor(): Cacheable, Parcelable {
     override fun describeContents(): Int = 0;
 
     companion object {
-        val CREATOR = object : Parcelable.Creator<HourlyForecastEntity> {
-            override fun createFromParcel(source: Parcel): HourlyForecastEntity = HourlyForecastEntity(source);
-            override fun newArray(size: Int): Array<HourlyForecastEntity?> = arrayOfNulls<HourlyForecastEntity?>(size);
+        val CREATOR = object : Parcelable.Creator<CurrentWeatherEntity> {
+            override fun createFromParcel(source: Parcel): CurrentWeatherEntity = CurrentWeatherEntity(source);
+            override fun newArray(size: Int): Array<CurrentWeatherEntity?> = arrayOfNulls<CurrentWeatherEntity?>(size);
         };
     }
 }

@@ -1,19 +1,19 @@
 package fr.cvlaminck.hwweather.front.activities
 
 import android.app.Activity
-import android.app.LoaderManager
 import android.content.Intent
-import android.content.Loader
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
 import com.skocken.efficientadapter.lib.adapter.EfficientAdapter
 import com.skocken.efficientadapter.lib.adapter.EfficientRecyclerAdapter
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.loaders.HwWeatherOperationResult
-import fr.cvlaminck.hwweather.core.loaders.SearchCityLoader
+import fr.cvlaminck.hwweather.core.loaders.city.SearchCityLoader
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.model.Page
 import fr.cvlaminck.hwweather.core.model.city.CityPageSet
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.searchcityactivity.rvCities
 import kotlinx.android.synthetic.searchcityactivity.svCity
 import javax.inject.Inject
 
-public class SearchCityActivity : Activity() {
+public class SearchCityActivity : FragmentActivity() {
     companion object {
         val BUNDLE_QUERY = "QUERY";
         val BUNDLE_SEARCHING = "SEARCHING";
@@ -72,8 +72,8 @@ public class SearchCityActivity : Activity() {
         args.putString(BUNDLE_QUERY, query);
 
         when (mayRestartIfExisting) {
-            false -> loaderManager.initLoader(SEARCH_CITY_LOADER_ID, args, loaderCallbacks);
-            true -> loaderManager.restartLoader(SEARCH_CITY_LOADER_ID, args, loaderCallbacks);
+            false -> supportLoaderManager.initLoader(SEARCH_CITY_LOADER_ID, args, loaderCallbacks);
+            true -> supportLoaderManager.restartLoader(SEARCH_CITY_LOADER_ID, args, loaderCallbacks);
         }
 
         //TODO: Then we update the UI to show a indeterminate progress

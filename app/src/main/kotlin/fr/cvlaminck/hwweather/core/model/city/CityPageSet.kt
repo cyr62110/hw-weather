@@ -24,20 +24,20 @@ public class CityPageSet(
 
     companion object {
         val CREATOR = object : Parcelable.Creator<CityPageSet> {
-            override fun createFromParcel(source: Parcel?): CityPageSet? {
+            override fun createFromParcel(source: Parcel): CityPageSet? {
                 val pageSet = CityPageSet (
-                        source!!.readString(),
-                        source!!.readInt(),
-                        source!!.readInt()
+                        source.readString(),
+                        source.readInt(),
+                        source.readInt()
                 );
-                val numberOfPage = source!!.readInt();
+                val numberOfPage = source.readInt();
                 if (numberOfPage > 0) {
                     val pageIndexes = IntArray(numberOfPage);
-                    source!!.readIntArray(pageIndexes);
+                    source.readIntArray(pageIndexes);
                     pageSet.pageIndexes.addAll(pageIndexes.toList());
                 }
                 val results = ArrayList<CityEntity>();
-                source!!.readTypedList(results, CityEntity.CREATOR);
+                source.readTypedList(results, CityEntity.CREATOR);
                 pageSet.results.addAll(results);
                 return pageSet;
             }

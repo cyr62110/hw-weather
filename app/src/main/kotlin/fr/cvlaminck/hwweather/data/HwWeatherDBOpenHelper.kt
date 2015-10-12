@@ -9,7 +9,7 @@ import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
-import fr.cvlaminck.hwweather.data.model.weather.WeatherEntity
+import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 
 public class HwWeatherDBOpenHelper(context: Context) : OrmLiteSqliteOpenHelper(context, HwWeatherDBOpenHelper.DATABASE_NAME, null, HwWeatherDBOpenHelper.VERSION) {
     companion object {
@@ -20,7 +20,7 @@ public class HwWeatherDBOpenHelper(context: Context) : OrmLiteSqliteOpenHelper(c
     override fun onCreate(database: SQLiteDatabase?, connectionSource: ConnectionSource?) {
         val entityClasses = listOf(
                 CityEntity::class, ExternalCityIdEntity::class,
-                WeatherEntity::class, DailyForecastEntity::class, HourlyForecastEntity::class);
+                CurrentWeatherEntity::class, DailyForecastEntity::class, HourlyForecastEntity::class);
         for(entityClass in entityClasses) {
             TableUtils.createTableIfNotExists(connectionSource, entityClass.java);
         }

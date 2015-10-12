@@ -21,12 +21,13 @@ public class DailyForecastRepository (
                 .query();
     }
 
-    fun deleteByCityAndDateBetween(city: CityEntity, start: DateTime, end: DateTime) {
-        deleteBuilder().where()
+    fun deleteByCityAndDayBetween(city: CityEntity, start: DateTime, end: DateTime) {
+        val deleteBuilder = deleteBuilder();
+        deleteBuilder.where()
                 .eq("city_id", city.id).and()
                 .ge("day", start).and()
-                .lt("day", end)
-                .query();
+                .lt("day", end);
+        deleteBuilder.delete();
     }
 
 }

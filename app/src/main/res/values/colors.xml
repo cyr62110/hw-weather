@@ -3,4 +3,10 @@
     <color name="dodger_blue">#3399FF</color>
     <color name="mariner_blue">#3366CC</color>
     <color name="midnight_blue">#003366</color>
+
+    <color name="white_100">#FFFFFF</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <color name="white_60">#99FFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
 </resources>

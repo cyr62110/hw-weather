@@ -2,22 +2,28 @@ package fr.cvlaminck.hwweather.front.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.client.resources.weather.enums.WeatherDataType
+import fr.cvlaminck.hwweather.core.loaders.HwWeatherOperationResult
 import fr.cvlaminck.hwweather.core.managers.CityManager
 import fr.cvlaminck.hwweather.core.managers.WeatherManager
+import fr.cvlaminck.hwweather.core.model.weather.WeatherData
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
 
 public class WeatherFragment() : Fragment() {
     companion object {
+        private val GET_WEATHER_LOADER_ID = 42;
+        private val BUNDLE_CITY = "city";
+
         private val BUNDLE_ARGUMENTS_CITY = "city";
         fun newInstance(context: Context, city: CityEntity): WeatherFragment {
             val fg = WeatherFragment();
@@ -50,8 +56,6 @@ public class WeatherFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _city = null;
-
-        test.execute(city);
     }
 
     override fun onAttach(activity: Activity) {
@@ -66,15 +70,44 @@ public class WeatherFragment() : Fragment() {
 
     }
 
+    private fun searchCity(city: CityEntity, mayRestartIfExisting: Boolean = true) {
+        //First, we create or bind to the loader that will do the networking
+        val args = Bundle();
+        args.putParcelable(BUNDLE_CITY, city);
+
+        when (mayRestartIfExisting) {
+            false -> loaderManager.initLoader(GET_WEATHER_LOADER_ID, args, loaderCallbacks);
+            true -> loaderManager.restartLoader(GET_WEATHER_LOADER_ID, args, loaderCallbacks);
+        }
+
+        //TODO: Then we update the UI to show a indeterminate progress
+    }
+
+    private fun updateResults(data: WeatherData) {
+
+    }
+
     override fun onDetach() {
         super.onDetach()
     }
 
-    val test = object: AsyncTask<CityEntity, Void, Void>() { //FIXME make a proper loader
-        override fun doInBackground(vararg params: CityEntity?): Void? {
-            val city = params.get(0);
-            weatherManager.getWeatherForCity(city as CityEntity, listOf(WeatherDataType.DAILY));
-            return null;
+    private val loaderCallbacks = object : LoaderManager.LoaderCallbacks<HwWeatherOperationResult<WeatherData>> {
+        override fun onCreateLoader(id: Int, args: Bundle): Loader<HwWeatherOperationResult<WeatherData>> {
+            val city = args.getParcelable<CityEntity>(BUNDLE_CITY);
+            val typesToRefresh = WeatherDataType.values().toList();
+            return weatherManager.createLoaderForGetWeatherForCity(this@WeatherFragment.context, city, typesToRefresh);
+        }
+
+        override fun onLoadFinished(loader: Loader<HwWeatherOperationResult<WeatherData>>, data: HwWeatherOperationResult<WeatherData>) {
+            if (!data.failed) {
+                updateResults(data.result);
+            } else {
+                //TODO Handle error
+                data.cause.printStackTrace();
+            }
+        }
+
+        override fun onLoaderReset(loader: Loader<HwWeatherOperationResult<WeatherData>>) {
         }
     }
 }
