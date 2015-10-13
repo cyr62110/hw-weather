@@ -10,13 +10,19 @@
         <item name="thumb">@drawable/scrubber_control_selector_holo</item>
     </style>
 
-    <style name="HwWeather"></style>
-    <style name="HwWeather.Text" parent="android:TextAppearance"></style>
-    <style name="HwWeather.Text.Temperature">
+    <style name="HwWeather">
+        <item name="android:background">@color/mariner_blue</item>
+    </style>
+
+    <style name="HwWeather.Daily"></style>
+    <style name="HwWeather.Daily.Text" parent="android:TextAppearance"></style>
+    <style name="HwWeather.Daily.Text.Temperature">
         <item name="android:textSize">@dimen/text_medium</item>
     </style>
-    <style name="HwWeather.Text.TemperatureUnit">
+    <style name="HwWeather.Daily.Text.TemperatureUnit">
         <item name="android:textSize">@dimen/text_small</item>
     </style>
+
+
 
 </resources>

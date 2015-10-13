@@ -18,6 +18,7 @@ import fr.cvlaminck.hwweather.core.managers.WeatherManager
 import fr.cvlaminck.hwweather.core.model.weather.WeatherData
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
+import kotlinx.android.synthetic.weatherfragment.*;
 
 public class WeatherFragment() : Fragment() {
     companion object {
@@ -66,11 +67,16 @@ public class WeatherFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater!!.inflate(R.layout.weatherfragment, container, false);
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle) {
+        //TODO: if not results in instance state
+        loadWeatherForCity(city, false);
+    }
+
+    override fun onSaveInstanceState(out: Bundle) {
 
     }
 
-    private fun searchCity(city: CityEntity, mayRestartIfExisting: Boolean = true) {
+    private fun loadWeatherForCity(city: CityEntity, mayRestartIfExisting: Boolean = true) {
         //First, we create or bind to the loader that will do the networking
         val args = Bundle();
         args.putParcelable(BUNDLE_CITY, city);
@@ -84,7 +90,7 @@ public class WeatherFragment() : Fragment() {
     }
 
     private fun updateResults(data: WeatherData) {
-
+        
     }
 
     override fun onDetach() {

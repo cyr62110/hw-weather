@@ -14,6 +14,7 @@ import fr.cvlaminck.hwweather.core.managers.UserPreferencesManager
 import fr.cvlaminck.hwweather.core.themes.TemperatureFormatter
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 public class DailyForecastView(context: Context) : LinearLayout(context) {
@@ -24,6 +25,13 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
         bindViews();
         updateViewsContent();
     }
+
+    var dailyForecast: DailyForecastEntity? = null
+        get() = field;
+        set(forecast: DailyForecastEntity?) {
+            field = forecast;
+            updateViewsContent();
+        };
 
     @Inject
     lateinit var themeManager: ThemeManager;
@@ -61,7 +69,8 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
     }
 
     private fun updateViewsContent() {
-        val temperatureFormatter: TemperatureFormatter = themeManager.theme.temperatureFormatter;
+        val temperatureFormatter = themeManager.theme.temperatureFormatter;
+        val dateFormatter = themeManager.theme.dateFormatter;
         val temperatureUnit = userPreferencesManager.temperatureUnit;
 
         if (daily == null) {
@@ -69,10 +78,10 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
         } else {
             val iconSet = themeManager.theme.iconSet;
 
-            imgCondition!!.setImageDrawable(iconSet.getThumbnailForWeatherCondition(WeatherCondition.CLEAR));
+            imgCondition!!.setImageDrawable(iconSet.getThumbnailForWeatherCondition(WeatherCondition.CLEAR)); //FIXME
             txtMinTemperature!!.text = temperatureFormatter.formatDaily(daily!!.minTemperatureInCelsius, temperatureUnit);
             txtMaxTemperature!!.text = temperatureFormatter.formatDaily(daily!!.maxTemperatureInCelsius, temperatureUnit);
-            txtDay!!.setText("Tue");
+            txtDay!!.text = dateFormatter.formatDayForDaily(daily!!.day as DateTime);
         }
     }
 
