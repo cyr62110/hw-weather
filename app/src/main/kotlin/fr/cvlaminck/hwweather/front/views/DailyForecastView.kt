@@ -25,13 +25,6 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
         updateViewsContent();
     }
 
-    var dailyForecast: DailyForecastEntity? = null
-        get() = field;
-        set(forecast: DailyForecastEntity?) {
-            field = forecast;
-            updateViewsContent();
-        };
-
     @Inject
     lateinit var temperatureFormatter: TemperatureFormatter;
 
@@ -44,12 +37,16 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
     @Inject
     lateinit var userPreferencesManager: UserPreferencesManager;
 
-    var daily: DailyForecastEntity? = null;
-
     var imgCondition: ImageView? = null;
     var txtMinTemperature: TextView? = null;
     var txtMaxTemperature: TextView? = null;
     var txtDay: TextView? = null;
+
+    var daily: DailyForecastEntity? = null;
+        set(daily: DailyForecastEntity?) {
+            field = daily;
+            updateViewsContent();
+        }
 
     private fun inflateContentView() {
         val layoutInflater = LayoutInflater.from(context);

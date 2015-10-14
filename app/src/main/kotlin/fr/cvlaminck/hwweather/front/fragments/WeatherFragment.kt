@@ -18,7 +18,6 @@ import fr.cvlaminck.hwweather.core.managers.WeatherManager
 import fr.cvlaminck.hwweather.core.model.weather.WeatherData
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import javax.inject.Inject
-import kotlinx.android.synthetic.weatherfragment.*;
 
 public class WeatherFragment() : Fragment() {
     companion object {
@@ -54,9 +53,19 @@ public class WeatherFragment() : Fragment() {
             return _city as CityEntity;
         };
 
+    private var _fgWeeklyForecast: WeeklyForecastFragment? = null;
+    private val fgWeeklyForecast: WeeklyForecastFragment
+        get() {
+            if (_fgWeeklyForecast == null) {
+                _fgWeeklyForecast = childFragmentManager.findFragmentById(R.id.fgWeeklyForecast) as WeeklyForecastFragment;
+            }
+            return _fgWeeklyForecast as WeeklyForecastFragment;
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _city = null;
+        _fgWeeklyForecast = null;
     }
 
     override fun onAttach(activity: Activity) {
@@ -64,10 +73,10 @@ public class WeatherFragment() : Fragment() {
         (activity.application as HwWeatherApplication).component().inject(this);
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater!!.inflate(R.layout.weatherfragment, container, false);
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.weatherfragment, container, false);
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         //TODO: if not results in instance state
         loadWeatherForCity(city, false);
     }
@@ -90,7 +99,7 @@ public class WeatherFragment() : Fragment() {
     }
 
     private fun updateResults(data: WeatherData) {
-        
+        fgWeeklyForecast.dailyForecasts = data.daily;
     }
 
     override fun onDetach() {

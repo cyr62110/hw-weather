@@ -7,7 +7,7 @@
     </style>
 
     <style name="Theme.HwWeather" parent="android:Theme.Holo.Light.NoActionBar">
-        <item name="android:background">@color/mariner_blue</item>
+        <item name="android:windowBackground">@color/mariner_blue</item>
     </style>
 
     <style name="Widget.HwWeather"></style>
