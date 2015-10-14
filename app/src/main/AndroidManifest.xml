@@ -9,7 +9,7 @@
         android:label="HWWeather"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/Theme" >
+        android:theme="@style/Theme.HwWeather" >
         <activity
             android:name=".front.activities.WeatherActivity">
         </activity>

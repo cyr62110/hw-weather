@@ -3,7 +3,7 @@ allprojects {
         kotlinVersion='0.14.449'
         hwWeatherVersion = '0.2'
         ormLiteVersion = '4.48'
-        supportLibraryVersion = '23.0.0'
+        supportLibraryVersion = '23.0.1'
     }
 
     repositories {

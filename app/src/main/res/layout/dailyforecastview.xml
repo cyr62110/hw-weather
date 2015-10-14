@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Widget.HwWeather.Daily"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -7,21 +8,30 @@
     <ImageView
         android:id="@+id/imgCondition"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/txtMinTemperature"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MinTemperature"
+        android:text="0°C" />
 
     <TextView
         android:id="@+id/txtMaxTemperature"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MaxTemperature"
+        android:text="25°C" />
 
     <TextView
         android:id="@+id/txtDay"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.Day"
+        android:text="Mon." />
 
 </LinearLayout>

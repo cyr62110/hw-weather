@@ -9,11 +9,10 @@ import android.widget.TextView
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
-import fr.cvlaminck.hwweather.core.managers.ThemeManager
 import fr.cvlaminck.hwweather.core.managers.UserPreferencesManager
-import fr.cvlaminck.hwweather.core.themes.TemperatureFormatter
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
-import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
+import fr.cvlaminck.hwweather.front.formatters.DateFormatter
+import fr.cvlaminck.hwweather.front.formatters.TemperatureFormatter
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -34,7 +33,13 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
         };
 
     @Inject
-    lateinit var themeManager: ThemeManager;
+    lateinit var temperatureFormatter: TemperatureFormatter;
+
+    @Inject
+    lateinit var dateFormatter: DateFormatter;
+
+    @Inject
+    lateinit var iconSetManager: IconSetManager;
 
     @Inject
     lateinit var userPreferencesManager: UserPreferencesManager;
@@ -69,16 +74,12 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
     }
 
     private fun updateViewsContent() {
-        val temperatureFormatter = themeManager.theme.temperatureFormatter;
-        val dateFormatter = themeManager.theme.dateFormatter;
         val temperatureUnit = userPreferencesManager.temperatureUnit;
 
         if (daily == null) {
             emptyViewsContent();
         } else {
-            val iconSet = themeManager.theme.iconSet;
-
-            imgCondition!!.setImageDrawable(iconSet.getThumbnailForWeatherCondition(WeatherCondition.CLEAR)); //FIXME
+            imgCondition!!.setImageDrawable(iconSetManager.getThumbnailForWeatherCondition(daily!!.condition));
             txtMinTemperature!!.text = temperatureFormatter.formatDaily(daily!!.minTemperatureInCelsius, temperatureUnit);
             txtMaxTemperature!!.text = temperatureFormatter.formatDaily(daily!!.maxTemperatureInCelsius, temperatureUnit);
             txtDay!!.text = dateFormatter.formatDayForDaily(daily!!.day as DateTime);
