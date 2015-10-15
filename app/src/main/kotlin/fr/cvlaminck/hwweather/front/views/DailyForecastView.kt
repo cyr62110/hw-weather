@@ -1,6 +1,7 @@
 package fr.cvlaminck.hwweather.front.views
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,21 +11,14 @@ import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.core.managers.IconSetManager
 import fr.cvlaminck.hwweather.core.managers.UserPreferencesManager
+import fr.cvlaminck.hwweather.core.model.weather.TemperatureUnit
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.front.formatters.DateFormatter
 import fr.cvlaminck.hwweather.front.formatters.TemperatureFormatter
 import org.joda.time.DateTime
 import javax.inject.Inject
 
-public class DailyForecastView(context: Context) : LinearLayout(context) {
-    init {
-        (context.applicationContext as HwWeatherApplication).component().inject(this);
-
-        inflateContentView();
-        bindViews();
-        updateViewsContent();
-    }
-
+public class DailyForecastView : LinearLayout {
     @Inject
     lateinit var temperatureFormatter: TemperatureFormatter;
 
@@ -47,6 +41,28 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
             field = daily;
             updateViewsContent();
         }
+
+    public constructor(context: Context) : super(context) {
+        init();
+    }
+
+    public constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init();
+    }
+
+    public constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init();
+    }
+
+    private fun init() {
+        if (!isInEditMode) {
+            (context.applicationContext as HwWeatherApplication).component().inject(this);
+        }
+
+        inflateContentView();
+        bindViews();
+        updateViewsContent();
+    }
 
     private fun inflateContentView() {
         val layoutInflater = LayoutInflater.from(context);
@@ -71,6 +87,9 @@ public class DailyForecastView(context: Context) : LinearLayout(context) {
     }
 
     private fun updateViewsContent() {
+        if (isInEditMode) {
+            return; // In the IDE, we want to keep the fake values
+        }
         val temperatureUnit = userPreferencesManager.temperatureUnit;
 
         if (daily == null) {

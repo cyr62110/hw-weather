@@ -20,7 +20,6 @@ public class WeeklyForecastFragment : Fragment() {
             if (forecasts == null) {
                 _dailyForecasts.clear();
             } else {
-                //FIXME assert that there is the number of day configured in the configuration
                 _dailyForecasts = forecasts
                         .sortedBy { forecast -> forecast.day }
                         .toArrayList();

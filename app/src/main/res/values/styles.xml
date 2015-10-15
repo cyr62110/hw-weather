@@ -12,17 +12,24 @@
 
     <style name="Widget.HwWeather"></style>
     <style name="Widget.HwWeather.Daily"></style>
+    <style name="Widget.HwWeather.Daily.WeatherCondition">
+        <item name="android:maxWidth">@dimen/dailyforecastview_imgCondition_width</item>
+        <item name="android:maxHeight">@dimen/dailyforecastview_imgCondition_height</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">48dp</item>
+    </style>
     <style name="TextAppearance.HwWeather.Daily.Text" parent="android:TextAppearance">
         <item name="android:textColor">@color/white_100</item>
     </style>
     <style name="TextAppearance.HwWeather.Daily.Text.MinTemperature">
-        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textSize">@dimen/textSize_xlarge</item>
     </style>
     <style name="TextAppearance.HwWeather.Daily.Text.MaxTemperature">
-        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textSize">@dimen/textSize_xlarge</item>
     </style>
     <style name="TextAppearance.HwWeather.Daily.Text.Day">
-        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/white_60</item>
+        <item name="android:textSize">@dimen/text_large</item>
     </style>
 
 

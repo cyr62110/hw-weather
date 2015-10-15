@@ -17,7 +17,8 @@
         class="fr.cvlaminck.hwweather.front.fragments.WeeklyForecastFragment"
         android:id="@+id/fgWeeklyForecast"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_xxlarge"
         tools:layout="@layout/weeklyforecastfragment" />
 
 </LinearLayout>

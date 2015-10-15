@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@style/Widget.HwWeather.Daily"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imgCondition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/txtMinTemperature"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="96dp"
+        android:src="@drawable/ic_launcher"/>
 
-        android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MinTemperature"
-        android:text="0°C" />
-
-    <TextView
-        android:id="@+id/txtMaxTemperature"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llTemperatures"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/imgCondition"
+        android:layout_alignRight="@id/imgCondition"
+        android:layout_alignLeft="@id/imgCondition"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txtMaxTemperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
 
-        android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MaxTemperature"
-        android:text="25°C" />
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MaxTemperature"
+            android:text="25" />
+
+        <TextView
+            android:id="@+id/txtMinTemperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.MinTemperature"
+            android:text="0" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/txtDay"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/llTemperatures"
+        android:layout_alignRight="@id/imgCondition"
+        android:layout_alignLeft="@id/imgCondition"
 
+        android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.HwWeather.Daily.Text.Day"
         android:text="Mon." />
 
-</LinearLayout>
+</RelativeLayout>

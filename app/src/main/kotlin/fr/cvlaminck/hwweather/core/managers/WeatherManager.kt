@@ -25,7 +25,7 @@ public class WeatherManager @Inject constructor(
         private val weatherConverter: WeatherConverter,
         private val hwWeatherClient: HwWeatherClient
 ) {
-    val numberOfDaily = 7; //TODO: Read the value from a configuration and maybe controlled by server.
+    val numberOfDaily = 6; //TODO: Read the value from a configuration and maybe controlled by server.
     val numberOfHourly = 24;
 
     fun createLoaderForGetWeatherForCity(context: Context, city: CityEntity, typesToRefresh: Collection<WeatherDataType>) =
