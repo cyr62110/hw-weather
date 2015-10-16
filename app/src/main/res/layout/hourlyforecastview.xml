@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Widget.HwWeather.Hourly"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,6 +15,9 @@
         android:id="@+id/txtTemperature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.HwWeather.Hourly.Text.Temperature"
         android:text="19"/>
 
 </LinearLayout>
