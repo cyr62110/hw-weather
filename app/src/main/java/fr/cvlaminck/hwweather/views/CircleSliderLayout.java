@@ -1,5 +1,6 @@
 package fr.cvlaminck.hwweather.views;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -102,6 +103,14 @@ public class CircleSliderLayout
      */
     private float touchZoneFactor;
 
+    /**
+     * Debug option that will display the touch zone.
+     */
+    private boolean touchZoneVisible = false;
+
+    double touchZoneStartRadius;
+    double touchZoneEndRadius;
+
     private boolean touchToSeekEnabled = true;
 
     private OnCircleSliderLayoutChangeListener changeListener = null;
@@ -119,6 +128,7 @@ public class CircleSliderLayout
     private Paint progressTrackPaint = null;
     private Paint secondaryProgressTrackPaint = null;
     private Paint progressTrackBackgroundPaint = null;
+    private Paint touchZonePaint = null;
 
     public CircleSliderLayout(Context context) {
         super(context);
@@ -315,6 +325,10 @@ public class CircleSliderLayout
         drawThumb(canvas, childrenViewRect);
 
         drawClippedChildren(canvas, childrenViewRect, clippingPath);
+
+        if (touchZoneVisible) {
+            drawTouchZone(canvas, childrenViewRect);
+        }
     }
 
     private void drawClippedChildren(Canvas canvas, Rect childrenViewRect, Path clippingPath) {
@@ -374,6 +388,17 @@ public class CircleSliderLayout
             thumb.draw(canvas);
             canvas.restore();
         }
+    }
+
+    private void drawTouchZone(Canvas canvas, Rect childrenViewRect) {
+        updateTouchZone(childrenViewRect);
+
+        canvas.save();
+
+        touchZonePaint.setStrokeWidth((float) (touchZoneEndRadius - touchZoneStartRadius));
+        canvas.drawCircle(childrenViewRect.centerX(), childrenViewRect.centerY(), (float) (touchZoneStartRadius + touchZoneEndRadius) / 2, touchZonePaint);
+
+        canvas.restore();
     }
 
     @Override
@@ -440,7 +465,7 @@ public class CircleSliderLayout
         double angle = getAngle(coords);
         float newProgress = getProgressValueFromAngle(angle);
         boolean shouldUpdateProgress = true;
-        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+        if (ev.getAction() == MotionEvent.ACTION_MOVE && ev.getHistorySize() > 0) {
             RotationDirection direction = getRotationDirection(angle, ev);
             // On move, we only update the progress if the new progress value
             // is logical according to the direction of the movement.
@@ -544,6 +569,7 @@ public class CircleSliderLayout
     }
 
     @Override
+    @SuppressLint("NewApi")
     public void drawableHotspotChanged(float x, float y) {
         super.drawableHotspotChanged(x, y);
 
@@ -627,30 +653,35 @@ public class CircleSliderLayout
         return rect;
     }
 
-    private boolean isTouchEventInsideProgressTrack(MotionEvent.PointerCoords coords) {
-        Rect childrenViewRect = getChildrenViewRect(tempRect);
+    private void updateTouchZone(Rect childrenViewRect) {
+        touchZoneStartRadius = childrenViewRect.height() / 2d + borderWidth;
+        touchZoneEndRadius = childrenViewRect.height() / 2d + borderWidth + progressWidth;
 
-        double r = Math.pow(coords.x, 2) + Math.pow(coords.y, 2);
-
-        double touchableTrackStartRadius = childrenViewRect.top + borderWidth;
-        double touchableTrackEndRadius = childrenViewRect.top + borderWidth + progressWidth;
         if (thumb.getIntrinsicHeight() > progressWidth) {
             double thumbOverlay = (thumb.getIntrinsicHeight() - progressWidth) / 2;
-            touchableTrackStartRadius -= thumbOverlay;
-            touchableTrackEndRadius += thumbOverlay;
+            touchZoneStartRadius -= thumbOverlay;
+            touchZoneEndRadius += thumbOverlay;
         }
 
         // We augment/reduce the size of the touchable track by the touch zone factor
-        // FIXME: Create a debug option to display the touchable track.
         if (touchZoneFactor != 1f) {
-            double touchableTrackCenter = (touchableTrackEndRadius + touchableTrackStartRadius) / 2;
-            double touchableTrackSize = (touchableTrackEndRadius - touchableTrackStartRadius) * touchZoneFactor;
+            double touchZoneCenter = (touchZoneEndRadius + touchZoneStartRadius) / 2;
+            double touchZoneSize = (touchZoneEndRadius - touchZoneStartRadius) * touchZoneFactor;
 
-            touchableTrackStartRadius = touchableTrackCenter - touchableTrackSize / 2;
-            touchableTrackEndRadius = touchableTrackCenter + touchableTrackSize / 2;
+            touchZoneStartRadius = touchZoneCenter - touchZoneSize / 2;
+            touchZoneEndRadius = touchZoneCenter + touchZoneSize / 2;
         }
+    }
+    
+    private boolean isTouchEventInsideProgressTrack(MotionEvent.PointerCoords coords) {
+        Rect childrenViewRect = getChildrenViewRect(tempRect);
+        updateTouchZone(childrenViewRect);
 
-        return r >= Math.pow(touchableTrackStartRadius, 2) && r <= Math.pow(touchableTrackEndRadius, 2);
+        double x = coords.x - childrenViewRect.centerX();
+        double y = coords.y - childrenViewRect.centerY();
+
+        double r = Math.pow(x, 2) + Math.pow(y, 2);
+        return r >= Math.pow(touchZoneStartRadius, 2) && r <= Math.pow(touchZoneEndRadius, 2);
     }
 
     private boolean isTouchEventOnThumb(MotionEvent.PointerCoords coords) {
@@ -678,8 +709,16 @@ public class CircleSliderLayout
         secondaryProgressTrackPaint = new Paint();
         secondaryProgressTrackPaint.setColor(secondaryProgressTint);
         secondaryProgressTrackPaint.setAntiAlias(useAntiAliasing);
+
+        if (touchZoneVisible) {
+            touchZonePaint = new Paint();
+            touchZonePaint.setStyle(Paint.Style.STROKE);
+            touchZonePaint.setColor(Color.RED);
+            touchZonePaint.setAlpha(127);
+        }
     }
 
+    @SuppressLint("NewApi")
     private void applyThumbTint() {
         if (thumb == null) {
             return;
