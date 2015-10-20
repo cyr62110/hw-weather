@@ -6,10 +6,9 @@
 
     <ImageView
         android:id="@+id/imgCondition"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="96dp"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/sun"/>
 
     <LinearLayout
         android:id="@+id/llTemperatures"

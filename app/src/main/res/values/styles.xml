@@ -34,7 +34,10 @@
     <style name="TextAppearance.HwWeather.Hourly.Text.Temperature">
         <item name="android:textSize">46sp</item>
     </style>
-    <style name="TextAppearance.HwWeather.Hourly.Text.Day">
+    <style name="TextAppearance.HwWeather.Hourly.Text.TemperatureUnit">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TextAppearance.HwWeather.Hourly.Text.Hour">
         <item name="android:textColor">@color/white_60</item>
         <item name="android:textSize">@dimen/text_large</item>
     </style>

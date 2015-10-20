@@ -28,6 +28,7 @@
             <enum name="add" value="16" />
         </attr>
 
+        <attr name="touchZoneFactor" format="float" />
         <attr name="touchToSeekEnabled" format="boolean" />
     </declare-styleable>
 </resources>

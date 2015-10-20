@@ -62,6 +62,15 @@ public class WeatherFragment() : Fragment() {
             return _fgWeeklyForecast as WeeklyForecastFragment;
         }
 
+    private var _fgHourlyForecast: HourlyForecastFragment? = null;
+    private val fgHourlyForecast: HourlyForecastFragment
+        get() {
+            if (_fgHourlyForecast == null) {
+                _fgHourlyForecast = childFragmentManager.findFragmentById(R.id.fgHourlyForecast) as HourlyForecastFragment;
+            }
+            return _fgHourlyForecast as HourlyForecastFragment;
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _city = null;
@@ -99,6 +108,8 @@ public class WeatherFragment() : Fragment() {
     }
 
     private fun updateResults(data: WeatherData) {
+        fgHourlyForecast.currentWeather = data.current;
+        fgHourlyForecast.hourlyForecasts = data.hourly;
         fgWeeklyForecast.dailyForecasts = data.daily;
     }
 

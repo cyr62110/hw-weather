@@ -10,10 +10,11 @@ public class IconSetManager(
         private val context: Context) {
 
     fun getIconForWeatherCondition(weatherCondition: WeatherCondition): Drawable {
-        return context.getResources().getDrawable(R.mipmap.sun);
+        val densityDpi = context.resources.displayMetrics.densityDpi;
+        return context.resources.getDrawableForDensity(R.drawable.sun, densityDpi);
     }
 
     fun getThumbnailForWeatherCondition(weatherCondition: WeatherCondition): Drawable {
-        return context.getResources().getDrawable(R.mipmap.sun);
+        return getIconForWeatherCondition(weatherCondition);
     }
 }

@@ -11,7 +11,7 @@ public class CoreModule {
     @Provides
     fun provideHwWeatherClient(): HwWeatherClient {
         return HwWeatherClientFactory()
-                .baseUrl("http://192.168.1.10:8080")
+                .baseUrl("http://hwweather-cvlaminck.rhcloud.com")
                 .build();
     }
 

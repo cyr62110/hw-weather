@@ -53,6 +53,7 @@ public class HourlyForecastView: FrameLayout {
 
     private var imgCondition: ImageView? = null;
     private var txtTemperature: TextView? = null;
+    private var txtHour: TextView? = null;
 
     public constructor(context: Context) : super(context) {
         init();
@@ -85,11 +86,13 @@ public class HourlyForecastView: FrameLayout {
     private fun bindViews() {
         imgCondition = findViewById(R.id.imgCondition) as ImageView;
         txtTemperature = findViewById(R.id.txtTemperature) as TextView;
+        txtHour = findViewById(R.id.txtHour) as TextView;
     }
 
     private fun emptyViewsContent() {
         imgCondition!!.setImageDrawable(null);
         txtTemperature!!.text = null;
+        txtHour!!.text = null;
     }
 
     private fun updateViews() {
@@ -115,6 +118,7 @@ public class HourlyForecastView: FrameLayout {
 
         imgCondition!!.setImageDrawable(iconSetManager.getIconForWeatherCondition(condition as WeatherCondition));
         txtTemperature!!.text = temperatureFormatter.formatDaily(temperature as Double, temperatureUnit);
+        txtHour!!.text = dateFormatter.formatHourForHourlyOrCurrent(date as DateTime);
     }
 
 }
