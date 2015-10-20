@@ -55,6 +55,13 @@ public class CircleSliderLayout
      */
     private int borderColor;
 
+    /**
+     * Clockwise angle where the zero value should be.
+     * At 0, the zero value is at the top of the progress.
+     * At 180, the zero value is at the bottom of the progress.
+     */
+    private float progressStartOffset;
+
     private float progressValue;
 
     private float progressMaxValue;
@@ -88,6 +95,12 @@ public class CircleSliderLayout
      * the primary.
      */
     private int secondaryProgressWidth;
+
+    /**
+     * Factor that will augment/reduce the size of the zone around
+     * the progress where touch event will be caught.
+     */
+    private float touchZoneFactor;
 
     private boolean touchToSeekEnabled = true;
 
@@ -200,6 +213,7 @@ public class CircleSliderLayout
             thumbTintMode = null;
         }
 
+        touchZoneFactor = a.getFloat(R.styleable.CircleSliderLayout_touchZoneFactor, 1f);
         touchToSeekEnabled = a.getBoolean(R.styleable.CircleSliderLayout_touchToSeekEnabled, true);
 
         setProgressMaxValue(progressMaxValue);
@@ -378,7 +392,6 @@ public class CircleSliderLayout
             return false;
         }
 
-        Rect childrenViewRect = getChildrenViewRect(tempRect);
         if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
             ev.getPointerCoords(0, tempCoords);
             if (isTouchEventInsideProgressTrack(tempCoords)) {
@@ -425,15 +438,61 @@ public class CircleSliderLayout
 
     private void trackTouchEvent(MotionEvent ev, MotionEvent.PointerCoords coords) {
         double angle = getAngle(coords);
-        float progress = getProgressValueFromAngle(angle);
-        setProgressValue(progress, true);
+        float newProgress = getProgressValueFromAngle(angle);
+        boolean shouldUpdateProgress = true;
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            RotationDirection direction = getRotationDirection(angle, ev);
+            // On move, we only update the progress if the new progress value
+            // is logical according to the direction of the movement.
+            // TODO: Maybe add a boolean to disable this behavior.
+            switch (direction) {
+                case CLOCKWISE:
+                    shouldUpdateProgress = newProgress > progressValue;
+                    break;
+                case COUNTER_CLOCKWISE:
+                    shouldUpdateProgress = newProgress < progressValue;
+                    break;
+            }
+        }
+        if (shouldUpdateProgress) {
+            setProgressValue(newProgress, true);
+        }
     }
 
     private double getAngle(MotionEvent.PointerCoords coords) {
+        return getAngle(coords.x, coords.y);
+    }
+
+    private RotationDirection getRotationDirection(double newAngle, MotionEvent e) {
+        float historyX = e.getHistoricalX(e.getHistorySize() - 1);
+        float historyY = e.getHistoricalY(e.getHistorySize() - 1);
+        double historyAngle = getAngle(historyX, historyY);
+
+        double nAhA = newAngle - historyAngle; //Direct comparaison
+        double nAhA2P = newAngle - historyAngle + 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn
+
+        double minDifference = minAbs(nAhA, nAhA2P);
+        if (minDifference >= 0) {
+            return RotationDirection.CLOCKWISE;
+        } else {
+            return RotationDirection.COUNTER_CLOCKWISE;
+        }
+    }
+
+    private double minAbs(double a, double b) {
+        double min = Math.min(Math.abs(a), Math.abs(b));
+        if (min == Math.abs(a)) {
+            return a;
+        } else {
+            return b;
+        }
+    }
+
+    private double getAngle(float touchX, float touchY) {
         Rect childrenViewRect = getChildrenViewRect(tempRect);
 
-        double centeredX = coords.x - childrenViewRect.centerX();
-        double centeredY = childrenViewRect.centerY() - coords.y;
+        double centeredX = touchX - childrenViewRect.centerX();
+        double centeredY = childrenViewRect.centerY() - touchY;
 
         double radius = Math.sqrt(Math.pow(centeredX, 2) + Math.pow(centeredY, 2));
         double cos = centeredX / radius;
@@ -580,6 +639,17 @@ public class CircleSliderLayout
             touchableTrackStartRadius -= thumbOverlay;
             touchableTrackEndRadius += thumbOverlay;
         }
+
+        // We augment/reduce the size of the touchable track by the touch zone factor
+        // FIXME: Create a debug option to display the touchable track.
+        if (touchZoneFactor != 1f) {
+            double touchableTrackCenter = (touchableTrackEndRadius + touchableTrackStartRadius) / 2;
+            double touchableTrackSize = (touchableTrackEndRadius - touchableTrackStartRadius) * touchZoneFactor;
+
+            touchableTrackStartRadius = touchableTrackCenter - touchableTrackSize / 2;
+            touchableTrackEndRadius = touchableTrackCenter + touchableTrackSize / 2;
+        }
+
         return r >= Math.pow(touchableTrackStartRadius, 2) && r <= Math.pow(touchableTrackEndRadius, 2);
     }
 
@@ -731,6 +801,11 @@ public class CircleSliderLayout
 
     public void setOnCircleSliderLayoutChangeListener(OnCircleSliderLayoutChangeListener changeListener) {
         this.changeListener = changeListener;
+    }
+
+    private enum RotationDirection {
+        CLOCKWISE,
+        COUNTER_CLOCKWISE
     }
 
     public interface OnCircleSliderLayoutChangeListener {
