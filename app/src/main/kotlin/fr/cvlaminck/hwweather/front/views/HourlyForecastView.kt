@@ -113,7 +113,7 @@ public class HourlyForecastView: FrameLayout {
         } else if (currentWeather != null) {
             temperature = currentWeather!!.temperature;
             condition = currentWeather!!.condition;
-            date = DateTime.now();
+            date = currentWeather!!.hour;
         }
 
         imgCondition!!.setImageDrawable(iconSetManager.getIconForWeatherCondition(condition as WeatherCondition));

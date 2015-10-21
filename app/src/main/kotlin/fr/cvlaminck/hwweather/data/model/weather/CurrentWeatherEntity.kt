@@ -17,6 +17,7 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
         city = CityEntity();
 
         id = source.readInt();
+        hour = DateTime.parse(source.readString());
         city!!.id = source.readInt();
         temperature = source.readDouble();
         // weather condition
@@ -29,6 +30,8 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
 
     @DatabaseField(foreign = true, unique = true)
     var city: CityEntity? = null;
+
+    var hour: DateTime? = DateTime.now();
 
     @DatabaseField
     var temperature: Double = 0.0;
@@ -44,6 +47,7 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id as Int);
+        dest.writeString(hour.toString());
         dest.writeInt(city?.id as Int);
         dest.writeDouble(temperature);
         // weather condition
