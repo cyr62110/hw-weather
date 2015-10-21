@@ -22,6 +22,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
+import java.util.IllegalFormatCodePointException;
+
 import fr.cvlaminck.hwweather.R;
 
 public class CircleSliderLayout
@@ -64,6 +66,7 @@ public class CircleSliderLayout
     private float progressStartOffset;
 
     private float progressValue;
+    private double progressAngle;
 
     private float progressMaxValue;
 
@@ -451,6 +454,12 @@ public class CircleSliderLayout
                 }
                 return false;
             case MotionEvent.ACTION_UP:
+                if (dragging) {
+                    progressAngle = normalizeAngle(progressAngle, getProgressStartOffsetAngle());
+                    setDragging(false);
+                    return true;
+                }
+                return false;
             case MotionEvent.ACTION_CANCEL:
                 if (dragging) {
                     setPressed(false);
@@ -462,60 +471,35 @@ public class CircleSliderLayout
     }
 
     private void trackTouchEvent(MotionEvent ev, MotionEvent.PointerCoords coords) {
-        double angle = getAngle(coords);
-        float newProgress = getProgressValueFromAngle(angle);
-        boolean shouldUpdateProgress = true;
-        if (ev.getAction() == MotionEvent.ACTION_MOVE && ev.getHistorySize() > 0) {
-            RotationDirection direction = getRotationDirection(angle, ev);
-            // On move, we only update the progress if the new progress value
-            // is logical according to the direction of the movement.
-            // TODO: Maybe add a boolean to disable this behavior.
-            switch (direction) {
-                case CLOCKWISE:
-                    shouldUpdateProgress = newProgress > progressValue;
-                    break;
-                case COUNTER_CLOCKWISE:
-                    shouldUpdateProgress = newProgress < progressValue;
-                    break;
-            }
-        }
-        if (shouldUpdateProgress) {
-            setProgressValue(newProgress, true);
-        }
-    }
-
-    private double getAngle(MotionEvent.PointerCoords coords) {
-        return getAngle(coords.x, coords.y);
-    }
-
-    private RotationDirection getRotationDirection(double newAngle, MotionEvent e) {
-        float historyX = e.getHistoricalX(e.getHistorySize() - 1);
-        float historyY = e.getHistoricalY(e.getHistorySize() - 1);
-        double historyAngle = getAngle(historyX, historyY);
-
-        double nAhA = newAngle - historyAngle; //Direct comparaison
-        double nAhA2P = newAngle - historyAngle + 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn
-
-        double minDifference = minAbs(nAhA, nAhA2P);
-        if (minDifference >= 0) {
-            return RotationDirection.CLOCKWISE;
-        } else {
-            return RotationDirection.COUNTER_CLOCKWISE;
-        }
-    }
-
-    private double minAbs(double a, double b) {
-        double min = Math.min(Math.abs(a), Math.abs(b));
-        if (min == Math.abs(a)) {
-            return a;
-        } else {
-            return b;
-        }
-    }
-
-    private double getAngle(float touchX, float touchY) {
         Rect childrenViewRect = getChildrenViewRect(tempRect);
 
+        double newAngle = getAngle(ev.getX(), ev.getY(), childrenViewRect);
+        if (ev.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            double direct = newAngle - progressAngle; //Direct comparaison
+            double clockwise = newAngle - progressAngle + 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn clockwise
+            double counterClockwise = newAngle - progressAngle - 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn counter clockwise
+
+            double angularDifference = minAbs(direct, clockwise, counterClockwise);
+            newAngle = progressAngle + angularDifference;
+        }
+        progressAngle = newAngle;
+        setProgressValue(getProgressValueFromAngle(progressAngle), true);
+    }
+
+    private double minAbs(double a, double... b) {
+        double minAbs =  Math.abs(a);
+        double min = a;
+        for (double v : b) {
+            double newMinAbs = Math.min(minAbs, Math.abs(v));
+            if (newMinAbs != minAbs) {
+                minAbs = newMinAbs;
+                min = v;
+            }
+        }
+        return min;
+    }
+
+    private double getAngle(float touchX, float touchY, Rect childrenViewRect) {
         double centeredX = touchX - childrenViewRect.centerX();
         double centeredY = childrenViewRect.centerY() - touchY;
 
@@ -533,14 +517,32 @@ public class CircleSliderLayout
         }
         angle = 2 * Math.PI - (angle - Math.PI / 2); //Trigonometric angle do not rotate in the right sens. So we correct that and adjust our 0.
 
-        while (angle < 0 || angle > 2 * Math.PI) {
-            angle += ((angle < 0) ? 1 : -1) * 2 * Math.PI;
+        return normalizeAngle(angle, 0f);
+    }
+
+    /**
+     * Normalize the angle between [zeroOffset; zeroOffset + 2*Pi[ radian.
+     */
+    private double normalizeAngle(double angle, double zeroOffset) {
+        while (angle < zeroOffset || angle >= zeroOffset + 2 * Math.PI) {
+            angle += ((angle < zeroOffset) ? 1 : -1) * 2 * Math.PI;
         }
         return angle;
     }
 
     private float getProgressValueFromAngle(double angle) {
+        double progressStartOffset = getProgressStartOffsetAngle();
+        if (angle < progressStartOffset) {
+            return 0.0f;
+        } else if (angle >= progressStartOffset + 2 * Math.PI) {
+            return progressMaxValue;
+        }
+        angle = normalizeAngle(angle, progressStartOffset);
         return (float) (angle / (2 * Math.PI)) * progressMaxValue;
+    }
+
+    private double getProgressStartOffsetAngle() {
+        return (progressStartOffset / 360d) * 2 * Math.PI;
     }
 
     //Those four methods must be overridden if you want your drawable to react to the
@@ -753,6 +755,13 @@ public class CircleSliderLayout
             }
         }
 
+    }
+
+    public void setProgressStartOffset(float progressStartOffset) {
+        if (progressStartOffset < 0) {
+            throw new IllegalFormatCodePointException()
+        }
+        this.progressStartOffset = progressStartOffset;
     }
 
     private void setProgressValue(float progressValue, boolean byUser) {
