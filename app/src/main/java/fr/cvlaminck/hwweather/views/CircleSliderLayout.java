@@ -456,6 +456,7 @@ public class CircleSliderLayout
             case MotionEvent.ACTION_UP:
                 if (dragging) {
                     progressAngle = normalizeAngle(progressAngle, getProgressStartOffsetAngle());
+                    setPressed(false);
                     setDragging(false);
                     return true;
                 }
@@ -758,10 +759,13 @@ public class CircleSliderLayout
     }
 
     public void setProgressStartOffset(float progressStartOffset) {
-        if (progressStartOffset < 0) {
-            throw new IllegalFormatCodePointException()
+        if (progressStartOffset < 0 ||progressStartOffset >= 360) {
+            throw new IllegalArgumentException("progressStartOffset must be an angle in degrees between 0 and 360 exclusive.");
         }
-        this.progressStartOffset = progressStartOffset;
+        if (this.progressStartOffset != progressStartOffset) {
+            this.progressStartOffset = progressStartOffset;
+            invalidate();
+        }
     }
 
     private void setProgressValue(float progressValue, boolean byUser) {
@@ -857,7 +861,7 @@ public class CircleSliderLayout
     }
 
     public interface OnCircleSliderLayoutChangeListener {
-        void onProgressChanged(CircleSliderLayout circleSliderLayout, double progress, boolean fromUser);
+        void onProgressChanged(CircleSliderLayout circleSliderLayout, float progress, boolean fromUser);
         void onStartTrackingTouch(CircleSliderLayout circleSliderLayout);
         void onStopTrackingTouch(CircleSliderLayout circleSliderLayout);
     }
