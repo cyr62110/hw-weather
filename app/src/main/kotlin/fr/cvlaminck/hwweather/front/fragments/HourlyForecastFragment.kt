@@ -81,7 +81,7 @@ public class HourlyForecastFragment : Fragment() {
                 startAngle = getStartAngleForHour(hourlyForecasts!!.first().hour as DateTime);
             }
             Log.d(this.javaClass.simpleName, "startAngle: " + startAngle.toString());
-            //cslHour.setProgressStartOffset(startAngle);
+            cslHour.setProgressStartOffset(startAngle);
         }
     }
 
