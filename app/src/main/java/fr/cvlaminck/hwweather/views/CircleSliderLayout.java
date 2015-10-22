@@ -17,12 +17,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
-
-import java.util.IllegalFormatCodePointException;
 
 import fr.cvlaminck.hwweather.R;
 
@@ -375,9 +372,10 @@ public class CircleSliderLayout
             progressRect.right += borderWidth + width;
             progressRect.bottom += borderWidth + width;
 
+            float progressStartAngle = this.progressStartOffset - 90.0f;
             float progressAngle = (value / maxValue) * 360f;
 
-            canvas.drawArc(progressRect, -90f, progressAngle, true, paint);
+            canvas.drawArc(progressRect, progressStartAngle, progressAngle, true, paint);
             canvas.restore();
         }
     }
@@ -475,7 +473,10 @@ public class CircleSliderLayout
         Rect childrenViewRect = getChildrenViewRect(tempRect);
 
         double newAngle = getAngle(ev.getX(), ev.getY(), childrenViewRect);
-        if (ev.getActionMasked() == MotionEvent.ACTION_MOVE) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            double startOffsetAngle = getProgressStartOffsetAngle();
+            newAngle = normalizeAngle(newAngle, startOffsetAngle);
+        } else if (ev.getActionMasked() == MotionEvent.ACTION_MOVE) {
             double direct = newAngle - progressAngle; //Direct comparaison
             double clockwise = newAngle - progressAngle + 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn clockwise
             double counterClockwise = newAngle - progressAngle - 2 * Math.PI; //Comparaison considering that one of the angle has done a full turn counter clockwise
@@ -484,11 +485,13 @@ public class CircleSliderLayout
             newAngle = progressAngle + angularDifference;
         }
         progressAngle = newAngle;
-        setProgressValue(getProgressValueFromAngle(progressAngle), true);
+
+        float progressValue = getProgressValueFromAngle(progressAngle);
+        setProgressValue(progressValue, true);
     }
 
     private double minAbs(double a, double... b) {
-        double minAbs =  Math.abs(a);
+        double minAbs = Math.abs(a);
         double min = a;
         for (double v : b) {
             double newMinAbs = Math.min(minAbs, Math.abs(v));
@@ -538,7 +541,7 @@ public class CircleSliderLayout
         } else if (angle >= progressStartOffset + 2 * Math.PI) {
             return progressMaxValue;
         }
-        angle = normalizeAngle(angle, progressStartOffset);
+        angle = normalizeAngle(angle - progressStartOffset, 0);
         return (float) (angle / (2 * Math.PI)) * progressMaxValue;
     }
 
@@ -644,10 +647,14 @@ public class CircleSliderLayout
         }
         Rect childrenViewRect = getChildrenViewRect(rect);
 
-        float progressAngle = ((progressValue / progressMaxValue) * 2 * (float) Math.PI) - (float) Math.PI / 2;
+        float progressAngle = ((progressValue / progressMaxValue) * 2 * (float) Math.PI);
+        float progressStartAngle = (float) (getProgressStartOffsetAngle() - Math.PI / 2);
+
+        float angle = (float) normalizeAngle(progressAngle + progressStartAngle, 0f);
+
         int r = childrenViewRect.height() / 2 + borderWidth + progressWidth / 2;
-        int xOffsetFromCenter = Math.round(r * (float) Math.cos(progressAngle));
-        int yOffsetFromCenter = Math.round(r * (float) Math.sin(progressAngle));
+        int xOffsetFromCenter = Math.round(r * (float) Math.cos(angle));
+        int yOffsetFromCenter = Math.round(r * (float) Math.sin(angle));
 
         rect.left = childrenViewRect.centerX() + xOffsetFromCenter - thumb.getIntrinsicWidth() / 2;
         rect.top = childrenViewRect.centerY() + yOffsetFromCenter - thumb.getIntrinsicHeight() / 2;
@@ -675,7 +682,7 @@ public class CircleSliderLayout
             touchZoneEndRadius = touchZoneCenter + touchZoneSize / 2;
         }
     }
-    
+
     private boolean isTouchEventInsideProgressTrack(MotionEvent.PointerCoords coords) {
         Rect childrenViewRect = getChildrenViewRect(tempRect);
         updateTouchZone(childrenViewRect);
@@ -759,7 +766,7 @@ public class CircleSliderLayout
     }
 
     public void setProgressStartOffset(float progressStartOffset) {
-        if (progressStartOffset < 0 ||progressStartOffset >= 360) {
+        if (progressStartOffset < 0 || progressStartOffset >= 360) {
             throw new IllegalArgumentException("progressStartOffset must be an angle in degrees between 0 and 360 exclusive.");
         }
         if (this.progressStartOffset != progressStartOffset) {
@@ -855,14 +862,11 @@ public class CircleSliderLayout
         this.changeListener = changeListener;
     }
 
-    private enum RotationDirection {
-        CLOCKWISE,
-        COUNTER_CLOCKWISE
-    }
-
     public interface OnCircleSliderLayoutChangeListener {
         void onProgressChanged(CircleSliderLayout circleSliderLayout, float progress, boolean fromUser);
+
         void onStartTrackingTouch(CircleSliderLayout circleSliderLayout);
+
         void onStopTrackingTouch(CircleSliderLayout circleSliderLayout);
     }
 }
