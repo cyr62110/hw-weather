@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Property;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -129,6 +130,12 @@ public class CircleSliderLayout
     private Paint secondaryProgressTrackPaint = null;
     private Paint progressTrackBackgroundPaint = null;
     private Paint touchZonePaint = null;
+
+    public static final Property<CircleSliderLayout, Float> PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "progress");
+    public static final Property<CircleSliderLayout, Float> PROGRESS_MAX_VALUE = Property.of(CircleSliderLayout.class, Float.class, "progressMaxValue");
+    public static final Property<CircleSliderLayout, Float> SECONDARY_PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "secondaryProgress");
+    public static final Property<CircleSliderLayout, Float> SECONDARY_PROGRESS_MAX_VALUE = Property.of(CircleSliderLayout.class, Float.class, "secondaryProgressMaxValue");
+    public static final Property<CircleSliderLayout, Float> PROGRESS_START_OFFSET = Property.of(CircleSliderLayout.class, Float.class, "progressStartOffset");
 
     public CircleSliderLayout(Context context) {
         super(context);
@@ -775,6 +782,10 @@ public class CircleSliderLayout
         }
     }
 
+    public float getProgressStartOffset() {
+        return progressStartOffset;
+    }
+
     private void setProgressValue(float progressValue, boolean byUser) {
         if (progressValue < 0) {
             throw new IllegalArgumentException("Progress bar value or max value cannot be negative.");
@@ -795,6 +806,10 @@ public class CircleSliderLayout
         setProgressValue(progressValue, false);
     }
 
+    public float getProgressValue() {
+        return progressValue;
+    }
+
     public void setProgressMaxValue(float progressMaxValue) {
         if (progressMaxValue < 0) {
             throw new IllegalArgumentException("Progress bar value or max value cannot be negative.");
@@ -804,6 +819,10 @@ public class CircleSliderLayout
             setProgressValue(this.progressValue, false);
             invalidate();
         }
+    }
+
+    public float getProgressMaxValue() {
+        return progressMaxValue;
     }
 
     public void setSecondaryProgressValue(float secondaryProgressValue) {
@@ -819,6 +838,10 @@ public class CircleSliderLayout
         }
     }
 
+    public float getSecondaryProgressValue() {
+        return secondaryProgressValue;
+    }
+
     public void setSecondaryProgressMaxValue(float secondaryProgressMaxValue) {
         if (secondaryProgressMaxValue < 0) {
             throw new IllegalArgumentException("Progress bar value or max value cannot be negative.");
@@ -828,6 +851,10 @@ public class CircleSliderLayout
             setSecondaryProgressValue(this.secondaryProgressValue);
             invalidate();
         }
+    }
+
+    public float getSecondaryProgressMaxValue() {
+        return secondaryProgressMaxValue;
     }
 
     public void setThumb(Drawable thumb) {
