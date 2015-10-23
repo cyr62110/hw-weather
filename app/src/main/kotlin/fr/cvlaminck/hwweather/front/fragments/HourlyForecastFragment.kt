@@ -1,5 +1,7 @@
 package fr.cvlaminck.hwweather.front.fragments
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -19,6 +21,9 @@ import org.joda.time.Period
 
 public class HourlyForecastFragment : Fragment() {
     private var adapter : HourlyForecastPagerAdapter? = null;
+
+    private var progressAnimator: ObjectAnimator? = null;
+    private var progressAnimated: Boolean = false;
 
     var currentWeather: CurrentWeatherEntity? = null
         set(currentWeather: CurrentWeatherEntity?) {
@@ -70,8 +75,7 @@ public class HourlyForecastFragment : Fragment() {
 
             //Update the progress value to match the first hour
             val progress = getProgressForHour(firstHour);
-            Log.d(this.javaClass.simpleName, "progress: " + progress.toString());
-            cslHour.setProgressValue(progress);
+            cslHour.progressValue = progress;
 
             //Update the start offset of the circle
             var startAngle: Float = 0f;
@@ -80,25 +84,58 @@ public class HourlyForecastFragment : Fragment() {
             } else if (hourlyForecasts != null && hourlyForecasts!!.isNotEmpty()) {
                 startAngle = getStartAngleForHour(hourlyForecasts!!.first().hour as DateTime);
             }
-            Log.d(this.javaClass.simpleName, "startAngle: " + startAngle.toString());
-            cslHour.setProgressStartOffset(startAngle);
+            cslHour.progressStartOffset = startAngle;
         }
     }
 
     private fun getStartAngleForHour(hour: DateTime) =
             hour.get(DateTimeFieldType.hourOfDay()) / 24.0f * 360.0f;
 
-    private fun getPageNumberForProgress(progress: Float) =
-            (progress / pageSizeInProgress).toInt();
+    private fun getPageNumberForProgress(progress: Float): Int {
+        val pageNumber = (progress / pageSizeInProgress).toInt();
+        return if (pageNumber < adapter!!.count) pageNumber else adapter!!.count - 1;
+    }
 
     private fun getProgressForHour(hour: DateTime): Float {
-        val period = Period(firstHour.withMinuteOfHour(0), hour.withSecondOfMinute(0));
-        return (period.minutes / 60.0f) * pageSizeInProgress;
+        val minutes = Period(firstHour.withMinuteOfHour(0), hour.withSecondOfMinute(0)).toStandardMinutes();
+        return (minutes.minutes / 60.0f) * pageSizeInProgress;
+    }
+
+    private fun animateProgressValueToMathHour() {
+        // When the user has finished to drag the progess,
+        // we animate so the position of the thumb correspond to an hour.
+
+        val pageNumber = getPageNumberForProgress(cslHour.progressValue);
+        val hour = if (currentWeather != null && pageNumber == 0) {
+            currentWeather!!.hour;
+        } else if (currentWeather != null && pageNumber > 0) {
+            hourlyForecasts!![pageNumber - 1].hour;
+        } else {
+            hourlyForecasts!![pageNumber].hour;
+        };
+
+        val targetProgressValue = getProgressForHour(hour as DateTime);
+
+        if (targetProgressValue != cslHour.progressValue) {
+            progressAnimator = ObjectAnimator.ofFloat(cslHour, CircleSliderLayout.PROGRESS, targetProgressValue)
+                    .setDuration(300);
+            progressAnimator!!.addListener(object: Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                    progressAnimated = true;
+                }
+                override fun onAnimationEnd(animation: Animator?) {
+                    progressAnimated = false;
+                }
+                override fun onAnimationRepeat(animation: Animator?) {}
+                override fun onAnimationCancel(animation: Animator?) {}
+            });
+            progressAnimator!!.start();
+        }
     }
 
     private val onCircleSliderLayoutChangeListener = object : CircleSliderLayout.OnCircleSliderLayoutChangeListener {
         override fun onProgressChanged(circleSliderLayout: CircleSliderLayout, progress: Float, byUser: Boolean) {
-            if (byUser) { // We only want
+            if (byUser) { // Animation do not change the page, so we optimize a bit.
                 val pageNumber = getPageNumberForProgress(progress);
                 if (pageNumber != vpHourlyForecast.currentItem) {
                     vpHourlyForecast.setCurrentItem(pageNumber, true);
@@ -107,7 +144,7 @@ public class HourlyForecastFragment : Fragment() {
         }
 
         override fun onStopTrackingTouch(circleSliderLayout: CircleSliderLayout) {
-
+            animateProgressValueToMathHour();
         }
 
         override fun onStartTrackingTouch(circleSliderLayout: CircleSliderLayout) {}
