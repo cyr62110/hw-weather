@@ -131,9 +131,9 @@ public class CircleSliderLayout
     private Paint progressTrackBackgroundPaint = null;
     private Paint touchZonePaint = null;
 
-    public static final Property<CircleSliderLayout, Float> PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "progress");
+    public static final Property<CircleSliderLayout, Float> PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "progressValue");
     public static final Property<CircleSliderLayout, Float> PROGRESS_MAX_VALUE = Property.of(CircleSliderLayout.class, Float.class, "progressMaxValue");
-    public static final Property<CircleSliderLayout, Float> SECONDARY_PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "secondaryProgress");
+    public static final Property<CircleSliderLayout, Float> SECONDARY_PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "secondaryProgressValue");
     public static final Property<CircleSliderLayout, Float> SECONDARY_PROGRESS_MAX_VALUE = Property.of(CircleSliderLayout.class, Float.class, "secondaryProgressMaxValue");
     public static final Property<CircleSliderLayout, Float> PROGRESS_START_OFFSET = Property.of(CircleSliderLayout.class, Float.class, "progressStartOffset");
 
