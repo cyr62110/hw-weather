@@ -1,6 +1,6 @@
 allprojects {
     ext {
-        kotlinVersion='0.14.449'
+        kotlinVersion='1.0.0-beta-1038'
         hwWeatherVersion = '0.2'
         ormLiteVersion = '4.48'
         supportLibraryVersion = '23.0.1'
