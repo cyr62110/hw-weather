@@ -120,7 +120,7 @@ public class WeatherFragment() : Fragment() {
     private val loaderCallbacks = object : LoaderManager.LoaderCallbacks<HwWeatherOperationResult<WeatherData>> {
         override fun onCreateLoader(id: Int, args: Bundle): Loader<HwWeatherOperationResult<WeatherData>> {
             val city = args.getParcelable<CityEntity>(BUNDLE_CITY);
-            val typesToRefresh = WeatherDataType.values().toList();
+            val typesToRefresh = WeatherDataType.values.toList();
             return weatherManager.createLoaderForGetWeatherForCity(this@WeatherFragment.context, city, typesToRefresh);
         }
 

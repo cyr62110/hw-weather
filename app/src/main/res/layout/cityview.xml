@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     app:cardElevation="2dp"
     app:cardMaxElevation="2dp"
+    app:cardUseCompatPadding="true"
     app:contentPadding="@dimen/padding_large">
+    <!-- TODO: Replace attribute by a theme -->
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -12,6 +12,17 @@
 
     <style name="Widget.HwWeather"></style>
 
+    <style name="Widget.HwWeather.Favorite">
+        <item name="android:background">@drawable/favorite_selector</item>
+    </style>
+
+    <style name="Widget.HwWeather.City" parent="CardView.Light">
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">@dimen/padding_large</item>
+    </style>
+
     <style name="Widget.HwWeather.Daily"></style>
     <style name="TextAppearance.HwWeather.Daily.Text" parent="android:TextAppearance">
         <item name="android:textColor">@color/white_100</item>

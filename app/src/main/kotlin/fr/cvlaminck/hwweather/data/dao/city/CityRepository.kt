@@ -9,4 +9,5 @@ public class CityRepository (
         connectionSource: ConnectionSource,
         entity: Class<CityEntity>
 ) : BaseDaoImpl<CityEntity, Int> (connectionSource, entity) {
+
 }

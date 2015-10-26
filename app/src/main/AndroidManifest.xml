@@ -8,8 +8,16 @@
         android:name=".HwWeatherApplication"
         android:label="HWWeather"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.HwWeather" >
+        <activity
+            android:name=".front.activities.RoutingStartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".front.activities.WeatherActivity">
         </activity>

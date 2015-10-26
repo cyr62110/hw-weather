@@ -6,11 +6,13 @@ import dagger.Provides
 import fr.cvlaminck.hwweather.data.HwWeatherDBOpenHelper
 import fr.cvlaminck.hwweather.data.dao.city.CityRepository
 import fr.cvlaminck.hwweather.data.dao.city.ExternalCityIdRepository
+import fr.cvlaminck.hwweather.data.dao.city.FavoriteCityRepository
 import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
 import fr.cvlaminck.hwweather.data.dao.weather.HourlyForecastRepository
 import fr.cvlaminck.hwweather.data.dao.weather.CurrentWeatherRepository
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
+import fr.cvlaminck.hwweather.data.model.city.FavoriteCityEntity
 import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
@@ -37,4 +39,6 @@ public class DataModule(private val helper: HwWeatherDBOpenHelper) {
     @Provides
     fun provideDailyForecastRepository() = helper.getDao(DailyForecastEntity::class.java) as DailyForecastRepository;
 
+    @Provides
+    fun provideFavoriteCityRepository() = helper.getDao(FavoriteCityEntity::class.java) as FavoriteCityRepository;
 }

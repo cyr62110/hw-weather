@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/padding_activity">
+    android:paddingTop="@dimen/margin_large"
+    android:paddingRight="@dimen/padding_xlarge"
+    android:paddingLeft="@dimen/padding_xlarge">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
