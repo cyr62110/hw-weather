@@ -1,7 +1,9 @@
 package fr.cvlaminck.hwweather.front.activities
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.data.dao.city.FavoriteCityRepository
 import javax.inject.Inject
 
@@ -12,12 +14,17 @@ class RoutingStartActivity: Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as HwWeatherApplication).component().inject(this);
 
         val activityToStart = if (favoriteCityRepository.countOf() == 0L) {
             SearchCityActivity::class.java
         } else {
-            SearchCityActivity::class.java //Replace by the activity with favorite cities.
+            FavoriteCitiesWeatherActivity::class.java
         }
+        val intent = Intent(this, activityToStart);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
     }
 
 }
