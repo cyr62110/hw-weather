@@ -10,13 +10,10 @@ class FavoriteCityRepository(
         entity: Class<FavoriteCityEntity>
 ) : BaseDaoImpl<FavoriteCityEntity, Int> (connectionSource, entity) {
 
-    fun findFavoritesOrdered(): List<CityEntity> {
-        val favoriteCitiesOrdered = queryBuilder()
+    fun findFavoritesOrdered(): List<FavoriteCityEntity> {
+        return queryBuilder()
             .orderBy("order", true)
             .query();
-
-        return favoriteCitiesOrdered
-            .map { it.city as CityEntity };
     }
 
 }

@@ -22,6 +22,9 @@
             android:name=".front.activities.WeatherActivity">
         </activity>
         <activity
+            android:name=".front.activities.FavoriteCitiesWeatherActivity">
+        </activity>
+        <activity
             android:name=".front.activities.SearchCityActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

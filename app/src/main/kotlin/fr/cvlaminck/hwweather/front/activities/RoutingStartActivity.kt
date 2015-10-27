@@ -4,19 +4,20 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import fr.cvlaminck.hwweather.HwWeatherApplication
+import fr.cvlaminck.hwweather.core.managers.FavoriteCityManager
 import fr.cvlaminck.hwweather.data.dao.city.FavoriteCityRepository
 import javax.inject.Inject
 
 class RoutingStartActivity: Activity() {
 
     @Inject
-    lateinit var favoriteCityRepository: FavoriteCityRepository;
+    lateinit var favoriteCityManager: FavoriteCityManager;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as HwWeatherApplication).component().inject(this);
 
-        val activityToStart = if (favoriteCityRepository.countOf() == 0L) {
+        val activityToStart = if (!favoriteCityManager.hasFavorite) {
             SearchCityActivity::class.java
         } else {
             FavoriteCitiesWeatherActivity::class.java

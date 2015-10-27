@@ -25,6 +25,7 @@
         tools:layout="@layout/hourlyforecastfragment" />
 
     <ToggleButton
+        android:id="@+id/btnFavorite"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"

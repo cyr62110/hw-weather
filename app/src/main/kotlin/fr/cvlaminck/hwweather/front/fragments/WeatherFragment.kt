@@ -9,14 +9,20 @@ import android.support.v4.content.Loader
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ToggleButton
+import butterknife.ButterKnife
+import butterknife.OnClick
 import fr.cvlaminck.hwweather.HwWeatherApplication
 import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.client.resources.weather.enums.WeatherDataType
 import fr.cvlaminck.hwweather.core.loaders.HwWeatherOperationResult
 import fr.cvlaminck.hwweather.core.managers.CityManager
+import fr.cvlaminck.hwweather.core.managers.FavoriteCityManager
 import fr.cvlaminck.hwweather.core.managers.WeatherManager
 import fr.cvlaminck.hwweather.core.model.weather.WeatherData
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
+import nl.komponents.kovenant.async
+import nl.komponents.kovenant.ui.successUi
 import javax.inject.Inject
 
 public class WeatherFragment() : Fragment() {
@@ -43,6 +49,9 @@ public class WeatherFragment() : Fragment() {
 
     @Inject
     lateinit var cityManager: CityManager;
+
+    @Inject
+    lateinit var favoriteCityManager: FavoriteCityManager;
 
     private var _city: CityEntity? = null;
     val city: CityEntity
@@ -82,16 +91,32 @@ public class WeatherFragment() : Fragment() {
         (activity.application as HwWeatherApplication).component().inject(this);
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.weatherfragment, container, false);
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(R.layout.weatherfragment, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        //TODO: if not results in instance state
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loadWeatherForCity(city, false);
     }
 
     override fun onSaveInstanceState(out: Bundle) {
 
+    }
+
+    @OnClick(R.id.btnFavorite)
+    fun btnFavoriteClick(btnFavorite: ToggleButton) {
+        val checked = btnFavorite.isChecked;
+        async {
+            if (checked) {
+                favoriteCityManager.add(city);
+            } else {
+                favoriteCityManager.remove(city);
+            }
+        } successUi {
+            btnFavorite.isChecked = checked;
+        }
     }
 
     private fun loadWeatherForCity(city: CityEntity, mayRestartIfExisting: Boolean = true) {
