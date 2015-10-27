@@ -24,6 +24,7 @@ import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import nl.komponents.kovenant.async
 import nl.komponents.kovenant.ui.successUi
 import javax.inject.Inject
+import kotlinx.android.synthetic.weatherfragment.*;
 
 public class WeatherFragment() : Fragment() {
     companion object {
@@ -98,6 +99,8 @@ public class WeatherFragment() : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        btnFavorite.isChecked = favoriteCityManager.isFavorite(city);
+
         loadWeatherForCity(city, false);
     }
 

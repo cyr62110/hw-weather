@@ -16,4 +16,10 @@ class FavoriteCityRepository(
             .query();
     }
 
+    fun isFavorite(city: CityEntity): Boolean {
+        return queryBuilder().where()
+            .eq("city_id", city.id)
+            .countOf() > 0;
+    }
+
 }

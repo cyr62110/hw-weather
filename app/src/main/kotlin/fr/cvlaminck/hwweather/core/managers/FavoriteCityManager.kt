@@ -18,6 +18,8 @@ public class FavoriteCityManager @Inject public constructor(
     val orderedFavoriteCities: List<CityEntity>
         get() = favorites.map { it.city as CityEntity };
 
+    fun isFavorite(city: CityEntity) = favoriteCityRepository.isFavorite(city);
+
     fun add(city: CityEntity) {
         val favorites = this.orderedFavoriteCities;
         if (favorites.contains(city)) {
