@@ -7,6 +7,7 @@ import fr.cvlaminck.hwweather.front.activities.FavoriteCitiesWeatherActivity;
 import fr.cvlaminck.hwweather.front.activities.RoutingStartActivity;
 import fr.cvlaminck.hwweather.front.activities.WeatherActivity;
 import fr.cvlaminck.hwweather.front.activities.SearchCityActivity;
+import fr.cvlaminck.hwweather.front.adapters.CityPagerAdapter;
 import fr.cvlaminck.hwweather.front.fragments.WeatherFragment;
 import fr.cvlaminck.hwweather.front.views.DailyForecastView;
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView;
@@ -23,4 +24,6 @@ public interface ApplicationComponent {
 
     void inject(HourlyForecastView view);
     void inject(DailyForecastView view);
+
+    void inject(CityPagerAdapter adapter);
 }
