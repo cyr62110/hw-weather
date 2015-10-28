@@ -25,6 +25,8 @@ import nl.komponents.kovenant.async
 import nl.komponents.kovenant.ui.successUi
 import javax.inject.Inject
 import kotlinx.android.synthetic.weatherfragment.*;
+import nl.komponents.kovenant.android.startKovenant
+import nl.komponents.kovenant.android.stopKovenant
 
 public class WeatherFragment() : Fragment() {
     companion object {
@@ -87,15 +89,17 @@ public class WeatherFragment() : Fragment() {
             updatePageOffset();
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _city = null;
-        _fgWeeklyForecast = null;
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity);
+        (activity.application as HwWeatherApplication).component().inject(this);
     }
 
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        (activity.application as HwWeatherApplication).component().inject(this);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState);
+        startKovenant();
+        
+        _city = null;
+        _fgWeeklyForecast = null;
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -107,18 +111,33 @@ public class WeatherFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btnFavorite.isChecked = favoriteCityManager.isFavorite(city);
 
+        if (savedInstanceState != null) {
+            // We reload the city from the parcelable so we keep its id if we have retrieved it during the refresh
+            _city = savedInstanceState.getParcelable(BUNDLE_CITY);
+        }
+
+        updateViews();
         updatePageOffset();
         loadWeatherForCity(city, false);
     }
 
     override fun onSaveInstanceState(out: Bundle) {
+        out.putParcelable(BUNDLE_CITY, _city);
+    }
 
+    override fun onDestroy() {
+        super.onDestroy();
+        stopKovenant();
     }
 
     private fun updatePageOffset() {
         if (_fgHourlyForecast != null) {
             _fgHourlyForecast!!.pageOffset = pageOffset;
         }
+    }
+
+    private fun updateViews() {
+        btnFavorite.isEnabled = (city.id != null);
     }
 
     @OnClick(R.id.btnFavorite)
@@ -149,9 +168,12 @@ public class WeatherFragment() : Fragment() {
     }
 
     private fun updateResults(data: WeatherData) {
+        _city = data.city as CityEntity;
         fgHourlyForecast.currentWeather = data.current;
         fgHourlyForecast.hourlyForecasts = data.hourly;
         fgWeeklyForecast.dailyForecasts = data.daily;
+
+        updateViews();
     }
 
     override fun onDetach() {
