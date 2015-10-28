@@ -109,7 +109,7 @@ public class WeatherManager @Inject constructor(
         if (city.id != null) {
             data.city!!.id = city.id;
         } else {
-            data.city = cityManager.save(city);
+            data.city = cityManager.save(data.city as CityEntity);
         }
         // Then, refresh the database with data obtained from the server
         saveWeatherDataResponseInDatabase(data.city as CityEntity, response);
