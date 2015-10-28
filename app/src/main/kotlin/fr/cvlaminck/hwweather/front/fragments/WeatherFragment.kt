@@ -68,18 +68,12 @@ public class WeatherFragment() : Fragment() {
     private var _fgWeeklyForecast: WeeklyForecastFragment? = null;
     private val fgWeeklyForecast: WeeklyForecastFragment
         get() {
-            if (_fgWeeklyForecast == null) {
-                _fgWeeklyForecast = childFragmentManager.findFragmentById(R.id.fgWeeklyForecast) as WeeklyForecastFragment;
-            }
             return _fgWeeklyForecast as WeeklyForecastFragment;
         }
 
     private var _fgHourlyForecast: HourlyForecastFragment? = null;
     private val fgHourlyForecast: HourlyForecastFragment
         get() {
-            if (_fgHourlyForecast == null) {
-                _fgHourlyForecast = childFragmentManager.findFragmentById(R.id.fgHourlyForecast) as HourlyForecastFragment;
-            }
             return _fgHourlyForecast as HourlyForecastFragment;
         }
 
@@ -97,13 +91,22 @@ public class WeatherFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         startKovenant();
-        
+
         _city = null;
         _fgWeeklyForecast = null;
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.weatherfragment, container, false);
+
+        _fgHourlyForecast = HourlyForecastFragment();
+        _fgWeeklyForecast = WeeklyForecastFragment();
+
+        val ft = childFragmentManager.beginTransaction();
+        ft.add(R.id.flWeeklyForecast, _fgWeeklyForecast);
+        ft.add(R.id.flHourlyForecast, _fgHourlyForecast);
+        ft.commit();
+
         ButterKnife.bind(this, view);
         return view;
     }

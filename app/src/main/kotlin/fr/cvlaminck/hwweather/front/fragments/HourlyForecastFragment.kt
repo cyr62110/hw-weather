@@ -96,7 +96,7 @@ public class HourlyForecastFragment : Fragment() {
     }
 
     private fun updatePageOffset() {
-        if (vpHourlyForecast != null) {
+        if (activity != null) {
             vpHourlyForecast.translationX = pageOffset;
         }
     }
