@@ -41,6 +41,13 @@ public class HourlyForecastFragment : Fragment() {
                         .sortedBy { it.hour };
             }
             updateViews();
+            updatePageOffset();
+        }
+
+    var pageOffset: Float = 0f
+        set(offset: Float) {
+            field = offset;
+            updatePageOffset();
         }
 
     private val pageSizeInProgress: Float
@@ -85,6 +92,12 @@ public class HourlyForecastFragment : Fragment() {
                 startAngle = getStartAngleForHour(hourlyForecasts!!.first().hour as DateTime);
             }
             cslHour.progressStartOffset = startAngle;
+        }
+    }
+
+    private fun updatePageOffset() {
+        if (vpHourlyForecast != null) {
+            vpHourlyForecast.translationX = pageOffset;
         }
     }
 

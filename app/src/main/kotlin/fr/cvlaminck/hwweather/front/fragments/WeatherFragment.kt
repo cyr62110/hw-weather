@@ -81,6 +81,12 @@ public class WeatherFragment() : Fragment() {
             return _fgHourlyForecast as HourlyForecastFragment;
         }
 
+    var pageOffset: Float = 0f
+        set(offset: Float) {
+            field = offset;
+            updatePageOffset();
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _city = null;
@@ -101,11 +107,18 @@ public class WeatherFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btnFavorite.isChecked = favoriteCityManager.isFavorite(city);
 
+        updatePageOffset();
         loadWeatherForCity(city, false);
     }
 
     override fun onSaveInstanceState(out: Bundle) {
 
+    }
+
+    private fun updatePageOffset() {
+        if (_fgHourlyForecast != null) {
+            _fgHourlyForecast!!.pageOffset = pageOffset;
+        }
     }
 
     @OnClick(R.id.btnFavorite)
