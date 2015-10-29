@@ -5,24 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
-        class="fr.cvlaminck.hwweather.front.fragments.WeeklyForecastFragment"
-        android:id="@+id/fgWeeklyForecast"
+    <FrameLayout
+        android:id="@+id/flWeeklyForecast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/margin_xxlarge"
-        tools:layout="@layout/weeklyforecastfragment" />
+        android:layout_marginBottom="@dimen/margin_xxlarge" />
 
-    <fragment
-        class="fr.cvlaminck.hwweather.front.fragments.HourlyForecastFragment"
-        android:id="@+id/fgHourlyForecast"
+    <FrameLayout
+        android:id="@+id/flHourlyForecast"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/fgWeeklyForecast"
-
-        tools:layout="@layout/hourlyforecastfragment" />
+        android:layout_above="@id/flWeeklyForecast" />
 
     <ToggleButton
         android:id="@+id/btnFavorite"
