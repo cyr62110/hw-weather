@@ -24,6 +24,9 @@ public class FavoriteCitiesWeatherActivity : FragmentActivity() {
     override fun onStart() {
         super.onStart()
 
+        val weatherFragment = adapter!!.getItem(0) as WeatherFragment;
+        weatherFragment.hourlyForecastContentOffset = 0.5f;
+
         vpCities.addOnPageChangeListener(vpCitiesOnPageChangeListener);
     }
 
@@ -35,21 +38,21 @@ public class FavoriteCitiesWeatherActivity : FragmentActivity() {
 
     private val vpCitiesOnPageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageSelected(position: Int) {
-            Log.d(this.javaClass.simpleName, "Selected : " + position.toString())
+            Log.d("vpCities", "Selected : " + position.toString())
         }
 
         override fun onPageScrollStateChanged(state: Int) {
-            Log.d(this.javaClass.simpleName, "State : " + state.toString())
+            Log.d("vpCities", "State : " + state.toString())
             if (state == ViewPager.SCROLL_STATE_IDLE) {
                 //FIXME reset all page offset.
             }
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            Log.d(this.javaClass.simpleName, "Scroll : " + position.toString() + " " + positionOffset.toString())
+            Log.d("vpCities", "Scroll : " + position.toString() + " " + positionOffset.toString())
 
             val weatherFragment = adapter!!.getItem(position) as WeatherFragment;
-            weatherFragment.pageOffset = positionOffset;
+            //weatherFragment.hourlyForecastContentOffset = positionOffset;
         }
     }
 

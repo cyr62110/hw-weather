@@ -20,6 +20,9 @@ public class CityPagerAdapter (
     @Inject
     lateinit var favoriteCityManager: FavoriteCityManager;
 
+    // FIXME: getItem create a new fragment each time it is callled
+    // instead used a map to keep reference and instantiate only one time (Sparse...)
+
     init {
         (context.applicationContext as HwWeatherApplication).component().inject(this);
 

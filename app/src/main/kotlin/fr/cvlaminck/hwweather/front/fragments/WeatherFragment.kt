@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,10 +78,12 @@ public class WeatherFragment() : Fragment() {
             return _fgHourlyForecast as HourlyForecastFragment;
         }
 
-    var pageOffset: Float = 0f
+    var hourlyForecastContentOffset: Float = 0f
         set(offset: Float) {
+            Log.d("weather", this.toString() + " set");
+
             field = offset;
-            updatePageOffset();
+            updateHourlyForecastContentOffset();
         }
 
     override fun onAttach(activity: Activity) {
@@ -93,7 +96,6 @@ public class WeatherFragment() : Fragment() {
         startKovenant();
 
         _city = null;
-        _fgWeeklyForecast = null;
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -120,7 +122,8 @@ public class WeatherFragment() : Fragment() {
         }
 
         updateViews();
-        updatePageOffset();
+        updateHourlyForecastContentOffset();
+
         loadWeatherForCity(city, false);
     }
 
@@ -133,9 +136,10 @@ public class WeatherFragment() : Fragment() {
         stopKovenant();
     }
 
-    private fun updatePageOffset() {
+    private fun updateHourlyForecastContentOffset() {
+        Log.d("weather", this.toString() + " updateHourlyForecastContentOffset: " + hourlyForecastContentOffset);
         if (_fgHourlyForecast != null) {
-            _fgHourlyForecast!!.pageOffset = pageOffset;
+            _fgHourlyForecast!!.circleSliderInnerContentOffset = hourlyForecastContentOffset;
         }
     }
 

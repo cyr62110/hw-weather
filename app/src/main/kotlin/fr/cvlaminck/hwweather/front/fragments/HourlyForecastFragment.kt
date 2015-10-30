@@ -41,13 +41,13 @@ public class HourlyForecastFragment : Fragment() {
                         .sortedBy { it.hour };
             }
             updateViews();
-            updatePageOffset();
+            updateCircleSliderInnerContentOffset();
         }
 
-    var pageOffset: Float = 0f
+    var circleSliderInnerContentOffset: Float = 0f
         set(offset: Float) {
-            field = offset;
-            updatePageOffset();
+            field = if (offset > 1) 1f else if (offset < 0) 0f else offset;
+            updateCircleSliderInnerContentOffset();
         }
 
     private val pageSizeInProgress: Float
@@ -95,9 +95,11 @@ public class HourlyForecastFragment : Fragment() {
         }
     }
 
-    private fun updatePageOffset() {
-        if (activity != null) {
-            vpHourlyForecast.translationX = pageOffset;
+    private fun updateCircleSliderInnerContentOffset() {
+        Log.d("hourly","updateCircleSliderInnerContentOffset: " + circleSliderInnerContentOffset);
+        if (adapter != null) {
+            Log.d("hourly"," Done");
+            vpHourlyForecast.translationX = circleSliderInnerContentOffset * vpHourlyForecast.width;
         }
     }
 
