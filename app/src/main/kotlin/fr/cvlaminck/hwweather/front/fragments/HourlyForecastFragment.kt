@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,9 @@ import kotlinx.android.synthetic.hourlyforecastfragment.cslHour
 import kotlinx.android.synthetic.hourlyforecastfragment.vpHourlyForecast
 import org.joda.time.DateTime
 import org.joda.time.DateTimeFieldType
+import org.joda.time.LocalDateTime
 import org.joda.time.Period
+import java.text.FieldPosition
 
 public class HourlyForecastFragment : Fragment() {
     private var adapter : HourlyForecastPagerAdapter? = null;
@@ -53,17 +56,6 @@ public class HourlyForecastFragment : Fragment() {
     private val pageSizeInProgress: Float
         get() = 1.0f / adapter!!.count;
 
-    private val firstHour: DateTime
-        get(): DateTime {
-            var firstHour = DateTime.now().withSecondOfMinute(0);
-            if (currentWeather != null) {
-                firstHour = currentWeather!!.hour;
-            } else if (hourlyForecasts != null && hourlyForecasts!!.isNotEmpty()) {
-                firstHour = hourlyForecasts!!.first().hour as DateTime;
-            }
-            return firstHour;
-        };
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.hourlyforecastfragment, container, false);
     }
@@ -72,6 +64,8 @@ public class HourlyForecastFragment : Fragment() {
         adapter = HourlyForecastPagerAdapter(activity);
         vpHourlyForecast.adapter = adapter;
         cslHour.onCircleSliderLayoutChangeListener = onCircleSliderLayoutChangeListener;
+
+        enableViewPagerScrollTracking();
     }
 
     private fun updateViews() {
@@ -81,7 +75,7 @@ public class HourlyForecastFragment : Fragment() {
             adapter!!.hourlyForecasts = hourlyForecasts;
 
             //Update the progress value to match the first hour
-            val progress = getProgressForHour(firstHour);
+            val progress = getProgressForHour(getHourForPosition(0));
             cslHour.progressValue = progress;
 
             //Update the start offset of the circle
@@ -103,8 +97,38 @@ public class HourlyForecastFragment : Fragment() {
         }
     }
 
+    private fun enableViewPagerScrollTracking() {
+        vpHourlyForecast.addOnPageChangeListener(vpHourlyForecastOnPageChangeListener);
+    }
+
+    private fun disableViewPagerScrollTracking() {
+        vpHourlyForecast.removeOnPageChangeListener(vpHourlyForecastOnPageChangeListener);
+    }
+
     private fun getStartAngleForHour(hour: DateTime) =
             hour.get(DateTimeFieldType.hourOfDay()) / 24.0f * 360.0f;
+
+    private fun getHourForPosition(position: Int): DateTime {
+        if (position == 0) {
+            var hour = DateTime.now().withSecondOfMinute(0);
+            if (currentWeather != null) {
+                hour = currentWeather!!.hour;
+            } else if (hourlyForecasts != null && hourlyForecasts!!.isNotEmpty()) {
+                hour = hourlyForecasts!!.first().hour as DateTime;
+            }
+            return hour;
+        } else {
+            var hour = DateTime.now()
+                    .withMinuteOfHour(0)
+                    .withSecondOfMinute(0)
+                    .plusHours(position);
+            val hourlyIndex = if (currentWeather != null) position - 1 else position;
+            if (hourlyForecasts != null && hourlyForecasts!!.size > hourlyIndex) {
+                hour = hourlyForecasts!!.get(hourlyIndex).hour as DateTime;
+            }
+            return hour;
+        }
+    }
 
     private fun getPageNumberForProgress(progress: Float): Int {
         val pageNumber = (progress / pageSizeInProgress).toInt();
@@ -112,7 +136,7 @@ public class HourlyForecastFragment : Fragment() {
     }
 
     private fun getProgressForHour(hour: DateTime): Float {
-        val minutes = Period(firstHour.withMinuteOfHour(0), hour.withSecondOfMinute(0)).toStandardMinutes();
+        val minutes = Period(getHourForPosition(0).withMinuteOfHour(0), hour.withSecondOfMinute(0)).toStandardMinutes();
         return (minutes.minutes / 60.0f) * pageSizeInProgress;
     }
 
@@ -140,11 +164,14 @@ public class HourlyForecastFragment : Fragment() {
                 }
                 override fun onAnimationEnd(animation: Animator?) {
                     progressAnimated = false;
+                    enableViewPagerScrollTracking();
                 }
                 override fun onAnimationRepeat(animation: Animator?) {}
                 override fun onAnimationCancel(animation: Animator?) {}
             });
             progressAnimator!!.start();
+        } else {
+            enableViewPagerScrollTracking();
         }
     }
 
@@ -158,10 +185,33 @@ public class HourlyForecastFragment : Fragment() {
             }
         }
 
+        override fun onStartTrackingTouch(circleSliderLayout: CircleSliderLayout) {
+            // When the user is moving the progress, we don't want the view pager listener to interact.
+            disableViewPagerScrollTracking();
+        }
+
         override fun onStopTrackingTouch(circleSliderLayout: CircleSliderLayout) {
             animateProgressValueToMathHour();
         }
+    }
 
-        override fun onStartTrackingTouch(circleSliderLayout: CircleSliderLayout) {}
+    private val vpHourlyForecastOnPageChangeListener = object : ViewPager.OnPageChangeListener {
+        override fun onPageSelected(position: Int) {}
+        override fun onPageScrollStateChanged(state: Int) {
+
+        }
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            // We synchronize the progress with the page scroll.
+            if (adapter == null || position >= adapter!!.count) {
+                return;
+            }
+            val hour = getHourForPosition(position);
+            val siblingHour = getHourForPosition(position + 1);
+
+            val period = Period(hour, siblingHour);
+            val minutesOffset: Int = (positionOffset * period.toStandardMinutes().minutes).toInt();
+
+            cslHour.progressValue = getProgressForHour(hour.plusMinutes(minutesOffset));
+        }
     }
 }
