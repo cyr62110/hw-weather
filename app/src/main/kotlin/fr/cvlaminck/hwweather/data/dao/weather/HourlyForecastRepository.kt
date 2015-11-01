@@ -6,13 +6,14 @@ import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import org.joda.time.DateTime
+import org.joda.time.LocalDateTime
 
 public class HourlyForecastRepository(
         connectionSource: ConnectionSource,
         clazz: Class<HourlyForecastEntity>
 ) : BaseDaoImpl<HourlyForecastEntity, Int> (connectionSource, clazz) {
 
-    fun findByCityAndDateBetween(city: CityEntity, start: DateTime, end: DateTime): List<HourlyForecastEntity> {
+    fun findByCityAndDateBetween(city: CityEntity, start: LocalDateTime, end: LocalDateTime): List<HourlyForecastEntity> {
         return queryBuilder().where()
                 .eq("city_id", city.id).and()
                 .ge("hour", start).and()
@@ -20,7 +21,7 @@ public class HourlyForecastRepository(
                 .query();
     }
 
-    fun deleteByCityAndHourBetween(city: CityEntity, start: DateTime, end: DateTime) {
+    fun deleteByCityAndHourBetween(city: CityEntity, start: LocalDateTime, end: LocalDateTime) {
         val deleteBuilder = deleteBuilder();
         deleteBuilder.where()
                 .eq("city_id", city.id).and()

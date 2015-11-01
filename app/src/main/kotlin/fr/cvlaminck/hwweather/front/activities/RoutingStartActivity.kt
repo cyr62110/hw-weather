@@ -8,6 +8,7 @@ import fr.cvlaminck.hwweather.core.managers.FavoriteCityManager
 import fr.cvlaminck.hwweather.data.dao.city.FavoriteCityRepository
 import javax.inject.Inject
 
+//FIXME: Remove this activity and put its code in the Favorite City instead.
 class RoutingStartActivity: Activity() {
 
     @Inject

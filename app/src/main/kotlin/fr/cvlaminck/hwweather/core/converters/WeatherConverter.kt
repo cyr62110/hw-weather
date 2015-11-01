@@ -9,6 +9,7 @@ import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
 import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 import org.joda.time.DateTime
+import org.joda.time.LocalDateTime
 import javax.inject.Inject
 
 public class WeatherConverter public @Inject constructor() {
@@ -19,7 +20,7 @@ public class WeatherConverter public @Inject constructor() {
 
     fun convert(daily: DailyForecastResource): DailyForecastEntity {
         val entity = DailyForecastEntity();
-        entity.day = DateTime(daily.date);
+        entity.day = LocalDateTime(daily.date);
         entity.maxTemperatureInCelsius = daily.maxTemperatureInCelsius;
         entity.minTemperatureInCelsius = daily.minTemperatureInCelsius;
         entity.condition = convert(daily.weatherCondition);
@@ -28,7 +29,7 @@ public class WeatherConverter public @Inject constructor() {
 
     fun convert(hourly: HourlyForecastResource): HourlyForecastEntity {
         val entity = HourlyForecastEntity();
-        entity.hour = DateTime(hourly.date);
+        entity.hour = LocalDateTime(hourly.date);
         entity.temperature = hourly.temperatureInCelsius;
         entity.condition = convert(hourly.weatherCondition);
         return entity;

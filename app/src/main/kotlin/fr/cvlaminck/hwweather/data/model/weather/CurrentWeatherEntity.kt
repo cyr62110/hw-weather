@@ -7,8 +7,11 @@ import com.j256.ormlite.table.DatabaseTable
 import fr.cvlaminck.hwweather.data.dao.weather.CurrentWeatherRepository
 import fr.cvlaminck.hwweather.data.model.Cacheable
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
+import fr.cvlaminck.hwweather.utils.nowUTC
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import org.joda.time.Instant
+import org.joda.time.LocalDateTime
 
 @DatabaseTable(tableName = "current", daoClass = CurrentWeatherRepository::class)
 public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
@@ -17,11 +20,11 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
         city = CityEntity();
 
         id = source.readInt();
-        hour = DateTime.parse(source.readString());
+        hour = LocalDateTime.parse(source.readString());
         city!!.id = source.readInt();
         temperature = source.readDouble();
         // weather condition
-        cacheDate = DateTime.parse(source.readString());
+        cacheDate = LocalDateTime.parse(source.readString());
         expiryInSecond = source.readInt();
     }
 
@@ -31,7 +34,7 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
     @DatabaseField(foreign = true, unique = true)
     var city: CityEntity? = null;
 
-    var hour: DateTime? = DateTime.now();
+    var hour: LocalDateTime? = nowUTC();
 
     @DatabaseField
     var temperature: Double = 0.0;
@@ -40,7 +43,7 @@ public class CurrentWeatherEntity public constructor(): Cacheable, Parcelable {
     var condition: WeatherCondition = WeatherCondition.CLEAR;
 
     @DatabaseField
-    override var cacheDate: DateTime = DateTime.now();
+    override var cacheDate: LocalDateTime = nowUTC();
 
     @DatabaseField
     override var expiryInSecond: Int = Cacheable.HALF_HOUR;

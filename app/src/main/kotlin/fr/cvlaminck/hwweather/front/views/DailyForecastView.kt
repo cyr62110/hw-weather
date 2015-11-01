@@ -16,6 +16,7 @@ import fr.cvlaminck.hwweather.data.model.weather.DailyForecastEntity
 import fr.cvlaminck.hwweather.front.formatters.DateFormatter
 import fr.cvlaminck.hwweather.front.formatters.TemperatureFormatter
 import org.joda.time.DateTime
+import org.joda.time.LocalDateTime
 import javax.inject.Inject
 
 public class DailyForecastView : LinearLayout {
@@ -98,7 +99,7 @@ public class DailyForecastView : LinearLayout {
             imgCondition!!.setImageDrawable(iconSetManager.getThumbnailForWeatherCondition(daily!!.condition));
             txtMinTemperature!!.text = temperatureFormatter.formatDaily(daily!!.minTemperatureInCelsius, temperatureUnit);
             txtMaxTemperature!!.text = temperatureFormatter.formatDaily(daily!!.maxTemperatureInCelsius, temperatureUnit);
-            txtDay!!.text = dateFormatter.formatDayForDaily(daily!!.day as DateTime);
+            txtDay!!.text = dateFormatter.formatDayForDaily(daily!!.day as LocalDateTime);
         }
     }
 

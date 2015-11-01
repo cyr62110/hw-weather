@@ -13,6 +13,8 @@ import fr.cvlaminck.hwweather.R
 import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.adapters.HourlyForecastPagerAdapter
+import fr.cvlaminck.hwweather.utils.isAfterNowUTC
+import fr.cvlaminck.hwweather.utils.nowUTC
 import fr.cvlaminck.hwweather.views.CircleSliderLayout
 import kotlinx.android.synthetic.hourlyforecastfragment.cslHour
 import kotlinx.android.synthetic.hourlyforecastfragment.vpHourlyForecast
@@ -40,7 +42,7 @@ public class HourlyForecastFragment : Fragment() {
                 listOf();
             } else {
                 hourlyForecasts
-                        .filter { it.hour!!.isAfterNow }
+                        .filter { it.hour!!.isAfterNowUTC() }
                         .sortedBy { it.hour };
             }
             updateViews();
@@ -108,23 +110,23 @@ public class HourlyForecastFragment : Fragment() {
     private fun getStartAngleForHour(hour: DateTime) =
             hour.get(DateTimeFieldType.hourOfDay()) / 24.0f * 360.0f;
 
-    private fun getHourForPosition(position: Int): DateTime {
+    private fun getHourForPosition(position: Int): LocalDateTime {
         if (position == 0) {
-            var hour = DateTime.now().withSecondOfMinute(0);
+            var hour = nowUTC().withSecondOfMinute(0);
             if (currentWeather != null) {
                 hour = currentWeather!!.hour;
             } else if (hourlyForecasts != null && hourlyForecasts!!.isNotEmpty()) {
-                hour = hourlyForecasts!!.first().hour as DateTime;
+                hour = hourlyForecasts!!.first().hour as LocalDateTime;
             }
             return hour;
         } else {
-            var hour = DateTime.now()
+            var hour = nowUTC()
                     .withMinuteOfHour(0)
                     .withSecondOfMinute(0)
                     .plusHours(position);
             val hourlyIndex = if (currentWeather != null) position - 1 else position;
             if (hourlyForecasts != null && hourlyForecasts!!.size > hourlyIndex) {
-                hour = hourlyForecasts!!.get(hourlyIndex).hour as DateTime;
+                hour = hourlyForecasts!![hourlyIndex].hour as LocalDateTime;
             }
             return hour;
         }
@@ -135,7 +137,7 @@ public class HourlyForecastFragment : Fragment() {
         return if (pageNumber < adapter!!.count) pageNumber else adapter!!.count - 1;
     }
 
-    private fun getProgressForHour(hour: DateTime): Float {
+    private fun getProgressForHour(hour: LocalDateTime): Float {
         val minutes = Period(getHourForPosition(0).withMinuteOfHour(0), hour.withSecondOfMinute(0)).toStandardMinutes();
         return (minutes.minutes / 60.0f) * pageSizeInProgress;
     }
@@ -153,7 +155,7 @@ public class HourlyForecastFragment : Fragment() {
             hourlyForecasts!![pageNumber].hour;
         };
 
-        val targetProgressValue = getProgressForHour(hour as DateTime);
+        val targetProgressValue = getProgressForHour(hour as LocalDateTime);
 
         if (targetProgressValue != cslHour.progressValue) {
             progressAnimator = ObjectAnimator.ofFloat(cslHour, CircleSliderLayout.PROGRESS, targetProgressValue)

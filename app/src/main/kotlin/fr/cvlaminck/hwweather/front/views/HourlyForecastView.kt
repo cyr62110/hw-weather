@@ -18,6 +18,7 @@ import fr.cvlaminck.hwweather.data.model.weather.WeatherCondition
 import fr.cvlaminck.hwweather.front.formatters.DateFormatter
 import fr.cvlaminck.hwweather.front.formatters.TemperatureFormatter
 import org.joda.time.DateTime
+import org.joda.time.LocalDateTime
 import javax.inject.Inject
 
 public class HourlyForecastView: FrameLayout {
@@ -103,7 +104,7 @@ public class HourlyForecastView: FrameLayout {
 
         var temperature: Double? = null;
         var condition: WeatherCondition? = null;
-        var date: DateTime? = null;
+        var date: LocalDateTime? = null;
         val temperatureUnit = userPreferencesManager.temperatureUnit;
 
         if (hourlyForecast != null) {
@@ -118,7 +119,7 @@ public class HourlyForecastView: FrameLayout {
 
         imgCondition!!.setImageDrawable(iconSetManager.getIconForWeatherCondition(condition as WeatherCondition));
         txtTemperature!!.text = temperatureFormatter.formatDaily(temperature as Double, temperatureUnit);
-        txtHour!!.text = dateFormatter.formatHourForHourlyOrCurrent(date as DateTime);
+        txtHour!!.text = dateFormatter.formatHourForHourlyOrCurrent(date as LocalDateTime);
     }
 
 }

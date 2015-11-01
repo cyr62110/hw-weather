@@ -7,7 +7,10 @@ import com.j256.ormlite.table.DatabaseTable
 import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
 import fr.cvlaminck.hwweather.data.model.Cacheable
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
+import fr.cvlaminck.hwweather.utils.nowUTC
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.LocalDateTime
 
 @DatabaseTable(tableName = "daily", daoClass = DailyForecastRepository::class)
 public class DailyForecastEntity public constructor() : Cacheable, Parcelable {
@@ -16,12 +19,12 @@ public class DailyForecastEntity public constructor() : Cacheable, Parcelable {
         city = CityEntity();
 
         id = source.readInt();
-        day = DateTime.parse(source.readString());
+        day = LocalDateTime.parse(source.readString());
         city!!.id = source.readInt();
         // weather condition
         minTemperatureInCelsius = source.readDouble();
         maxTemperatureInCelsius = source.readDouble();
-        cacheDate = DateTime.parse(source.readString());
+        cacheDate = LocalDateTime.parse(source.readString());
         expiryInSecond = source.readInt();
     }
 
@@ -29,7 +32,7 @@ public class DailyForecastEntity public constructor() : Cacheable, Parcelable {
     var id: Int? = null;
 
     @DatabaseField(index = true, uniqueCombo = true)
-    var day: DateTime? = null;
+    var day: LocalDateTime? = null;
 
     @DatabaseField(foreign = true, index = true, uniqueCombo = true)
     var city: CityEntity? = null;
@@ -44,7 +47,7 @@ public class DailyForecastEntity public constructor() : Cacheable, Parcelable {
     var maxTemperatureInCelsius: Double = 0.0;
 
     @DatabaseField
-    override var cacheDate: DateTime = DateTime.now();
+    override var cacheDate: LocalDateTime = nowUTC();
 
     @DatabaseField
     override var expiryInSecond: Int = Cacheable.SIX_HOUR;

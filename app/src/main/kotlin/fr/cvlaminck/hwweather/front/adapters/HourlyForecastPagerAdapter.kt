@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import fr.cvlaminck.hwweather.data.model.weather.CurrentWeatherEntity
 import fr.cvlaminck.hwweather.data.model.weather.HourlyForecastEntity
 import fr.cvlaminck.hwweather.front.views.HourlyForecastView
+import fr.cvlaminck.hwweather.utils.isAfterNowUTC
 
 public class HourlyForecastPagerAdapter(
         private val context: Context) : PagerAdapter() {
@@ -27,7 +28,7 @@ public class HourlyForecastPagerAdapter(
             }
         }
         get() : List<HourlyForecastEntity>? {
-            return field?.filter { it.hour!!.isAfterNow };
+            return field?.filter { it.hour!!.isAfterNowUTC() };
         }
 
     override fun getCount(): Int {
@@ -36,7 +37,7 @@ public class HourlyForecastPagerAdapter(
             count += 1;
         }
         if (hourlyForecasts != null) {
-            count += hourlyForecasts!!.size();
+            count += hourlyForecasts!!.size;
         }
         return count;
     };

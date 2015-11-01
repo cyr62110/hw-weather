@@ -1,6 +1,10 @@
 package fr.cvlaminck.hwweather.data.model
 
+import fr.cvlaminck.hwweather.utils.isAfterNowUTC
+import fr.cvlaminck.hwweather.utils.isBeforeNowUTC
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.LocalDateTime
 
 interface Cacheable {
     companion object {
@@ -11,13 +15,13 @@ interface Cacheable {
         val DAY: Int = 24 * 60 * 60;
     }
 
-    var cacheDate: DateTime; //Should be stored in device timezone.
+    var cacheDate: LocalDateTime; //Should be stored in device timezone.
     var expiryInSecond: Int;
 
     val expiryInMillisecond: Int
         get() = expiryInSecond * 1000;
 
     val expired: Boolean
-        get() = cacheDate.isAfterNow
-                || cacheDate.plusMillis(expiryInMillisecond).isBeforeNow;
+        get() = cacheDate.isAfterNowUTC()
+                || cacheDate.plusMillis(expiryInMillisecond).isBeforeNowUTC();
 }

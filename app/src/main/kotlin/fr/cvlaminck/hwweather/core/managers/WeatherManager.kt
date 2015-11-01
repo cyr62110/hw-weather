@@ -13,7 +13,10 @@ import fr.cvlaminck.hwweather.data.dao.weather.DailyForecastRepository
 import fr.cvlaminck.hwweather.data.dao.weather.HourlyForecastRepository
 import fr.cvlaminck.hwweather.data.model.city.CityEntity
 import fr.cvlaminck.hwweather.data.model.city.ExternalCityIdEntity
+import fr.cvlaminck.hwweather.utils.nowUTC
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.LocalDateTime
 import javax.inject.Inject
 
 public class WeatherManager @Inject constructor(
@@ -26,7 +29,7 @@ public class WeatherManager @Inject constructor(
         private val hwWeatherClient: HwWeatherClient
 ) {
     val numberOfDaily = 5; //TODO: Read the value from a configuration and maybe controlled by server. Change it for tablet of phone
-    val numberOfHourly = 24;
+    val numberOfHourly = 23;
 
     fun createLoaderForGetWeatherForCity(context: Context, city: CityEntity, typesToRefresh: Collection<WeatherDataType>) =
             GetWeatherLoader(context, city, typesToRefresh, this);
@@ -65,25 +68,27 @@ public class WeatherManager @Inject constructor(
                     }
                 }
                 WeatherDataType.HOURLY -> {
-                    val startHour = DateTime.now()
+                    val startHour = nowUTC()
                             .withMinuteOfHour(0)
                             .withSecondOfMinute(0)
-                            .withMillisOfSecond(0);
+                            .withMillisOfSecond(0)
+                            .plusHours(1);
                     val endHour = startHour.plusHours(numberOfHourly);
 
                     val hourly = hourlyForecastRepository.findByCityAndDateBetween(city, startHour, endHour)
                             .filter { hourly -> !hourly.expired; };
-                    if (hourly.size() == numberOfHourly) {
+                    if (hourly.size == numberOfHourly) {
                         data.hourly.addAll(hourly);
                     }
                 }
                 WeatherDataType.DAILY -> {
-                    val startDay = DateTime.now().withTimeAtStartOfDay();
+                    val startDay = LocalDateTime.now(DateTimeZone.UTC)
+                            .withMillisOfDay(0);
                     val endDay = startDay.plusDays(numberOfDaily);
 
                     val daily = dailyForecastRepository.findByCityAndDateBetween(city, startDay, endDay)
                             .filter { daily -> !daily.expired };
-                    if (daily.size() == numberOfDaily) {
+                    if (daily.size == numberOfDaily) {
                         data.daily.addAll(daily);
                     }
                 }
@@ -136,8 +141,8 @@ public class WeatherManager @Inject constructor(
                     // Assign the city to each new entity
                     hourlyForecasts.forEach { it.city = city; }
                     // Clear data already cached in the database for the received hours
-                    val startHour = hourlyForecasts.first().hour as DateTime;
-                    val endHour = hourlyForecasts.last().hour?.plusHours(1) as DateTime;
+                    val startHour = hourlyForecasts.first().hour as LocalDateTime;
+                    val endHour = hourlyForecasts.last().hour?.plusHours(1) as LocalDateTime;
                     hourlyForecastRepository.deleteByCityAndHourBetween(city, startHour, endHour);
                     // Then save the new data
                     hourlyForecasts.forEach { hourlyForecastRepository.create(it); };
@@ -149,8 +154,8 @@ public class WeatherManager @Inject constructor(
                     // Assign the city to each new entity
                     dailyForecasts.forEach { it.city = city; }
                     // Clear data already cached in the database for the received days
-                    val startDay = dailyForecasts.first().day as DateTime;
-                    val endDay = dailyForecasts.last().day?.plusDays(1) as DateTime;
+                    val startDay = dailyForecasts.first().day as LocalDateTime;
+                    val endDay = dailyForecasts.last().day?.plusDays(1) as LocalDateTime;
                     dailyForecastRepository.deleteByCityAndDayBetween(city, startDay, endDay);
                     // Then save the new data
                     dailyForecasts.forEach { dailyForecastRepository.create(it); };

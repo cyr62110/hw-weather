@@ -3,6 +3,7 @@ allprojects {
         kotlinVersion='1.0.0-beta-1038'
         hwWeatherVersion = '0.2'
         ormLiteVersion = '4.48'
+        jodaTimeVersion = '2.9'
         supportLibraryVersion = '23.0.1'
     }
 
@@ -10,10 +11,10 @@ allprojects {
         jcenter()
         mavenCentral()
         maven {
-            url 'http://oss.sonatype.org/content/repositories/snapshots'
+            url 'https://dl.bintray.com/cyr62110/maven'
         }
         maven {
-            url 'https://dl.bintray.com/cyr62110/maven'
+            url  "http://dl.bintray.com/gautierlevert/maven"
         }
     }
 }
