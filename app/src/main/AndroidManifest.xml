@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.cvlaminck.hwweather" >
+    package="fr.cvlaminck.hwweather">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".HwWeatherApplication"
-        android:label="HWWeather"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/Theme.HwWeather" >
-        <activity
-            android:name=".front.activities.RoutingStartActivity">
+        android:label="HWWeather"
+        android:theme="@style/Theme.HwWeather">
+        <activity android:name=".front.activities.RoutingStartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".front.activities.WeatherActivity">
-        </activity>
-        <activity
-            android:name=".front.activities.FavoriteCitiesWeatherActivity">
-        </activity>
-        <activity
-            android:name=".front.activities.SearchCityActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".front.activities.WeatherActivity"></activity>
+        <activity android:name=".front.activities.FavoriteCitiesWeatherActivity"></activity>
+        <activity android:name=".front.activities.SearchCityActivity"></activity>
     </application>
 
 </manifest>
