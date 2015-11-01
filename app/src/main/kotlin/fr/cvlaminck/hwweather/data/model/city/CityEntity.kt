@@ -62,6 +62,21 @@ public class CityEntity public constructor() : Parcelable {
         dest.writeString(country);
     }
 
+    override fun hashCode(): Int {
+        return if (id != null) id as Int else super.hashCode();
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is CityEntity) {
+            return false;
+        }
+        return if (id != null) {
+            id == other.id;
+        } else {
+            super.equals(other);
+        }
+    }
+
     override fun describeContents(): Int = 0;
 
     companion object {

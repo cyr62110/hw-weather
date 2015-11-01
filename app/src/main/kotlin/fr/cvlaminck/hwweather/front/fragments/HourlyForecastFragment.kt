@@ -46,7 +46,7 @@ public class HourlyForecastFragment : Fragment() {
 
     var circleSliderInnerContentOffset: Float = 0f
         set(offset: Float) {
-            field = if (offset > 1) 1f else if (offset < 0) 0f else offset;
+            field = if (offset > 1) 1f else if (offset < -1f) -1f else offset;
             updateCircleSliderInnerContentOffset();
         }
 
