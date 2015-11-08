@@ -80,8 +80,6 @@ public class WeatherFragment() : Fragment() {
 
     var hourlyForecastContentOffset: Float = 0f
         set(offset: Float) {
-            Log.d("weather", this.toString() + " set");
-
             field = offset;
             updateHourlyForecastContentOffset();
         }
@@ -137,7 +135,6 @@ public class WeatherFragment() : Fragment() {
     }
 
     private fun updateHourlyForecastContentOffset() {
-        Log.d("weather", this.toString() + " updateHourlyForecastContentOffset: " + hourlyForecastContentOffset);
         if (_fgHourlyForecast != null) {
             _fgHourlyForecast!!.circleSliderInnerContentOffset = hourlyForecastContentOffset;
         }

@@ -92,9 +92,7 @@ public class HourlyForecastFragment : Fragment() {
     }
 
     private fun updateCircleSliderInnerContentOffset() {
-        Log.d("hourly","updateCircleSliderInnerContentOffset: " + circleSliderInnerContentOffset);
         if (adapter != null) {
-            Log.d("hourly"," Done");
             vpHourlyForecast.translationX = circleSliderInnerContentOffset * vpHourlyForecast.width;
         }
     }
