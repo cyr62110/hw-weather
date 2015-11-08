@@ -701,6 +701,23 @@ public class CircleSliderLayout
         return rect;
     }
 
+    private int getControlDrawingCacheBackgroundColor() {
+        View view = this;
+        int backgroundColor = Color.TRANSPARENT;
+        while (view != null && backgroundColor == Color.TRANSPARENT) {
+            if (view.getBackground() != null && view.getBackground() instanceof ColorDrawable) {
+                backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
+            }
+            if (view.getParent() != null && view.getParent() instanceof View) {
+                view = (View)view.getParent();
+            } else {
+                view = null;
+            }
+        }
+        // We remove the alpha component of any background color we have found
+        return backgroundColor | 0x0FF000000;
+    }
+
     private void updateTouchZone(Rect childrenViewRect) {
         touchZoneStartRadius = childrenViewRect.height() / 2d + borderWidth;
         touchZoneEndRadius = childrenViewRect.height() / 2d + borderWidth + progressWidth;
@@ -764,6 +781,9 @@ public class CircleSliderLayout
             touchZonePaint.setColor(Color.RED);
             touchZonePaint.setAlpha(127);
         }
+
+        controlDrawingCachePaint = new Paint();
+        controlDrawingCachePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
     @SuppressLint("NewApi")
