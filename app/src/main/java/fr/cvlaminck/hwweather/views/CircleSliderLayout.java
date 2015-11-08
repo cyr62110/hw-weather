@@ -334,6 +334,14 @@ public class CircleSliderLayout
         Path clippingPath = new Path();
         clippingPath.addCircle(childrenViewRect.centerX(), childrenViewRect.centerY(), childrenViewRect.width() / 2, Path.Direction.CW);
 
+        if (!canvas.isHardwareAccelerated() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            dispatchDrawFullHardwareAccelerated(canvas, childrenViewRect, clippingPath);
+        } else {
+            dispatchDrawHardwareAcceleratedWithoutClipPath(canvas, childrenViewRect, clippingPath);
+        }
+    }
+
+    private void dispatchDrawFullHardwareAccelerated(Canvas canvas, Rect childrenViewRect, Path clippingPath) {
         drawBorder(canvas, childrenViewRect);
 
         drawProgressTrackBackground(canvas, childrenViewRect, clippingPath);
@@ -348,10 +356,23 @@ public class CircleSliderLayout
         }
     }
 
+    private void dispatchDrawHardwareAcceleratedWithoutClipPath(Canvas canvas, Rect childrenViewRect, Path clippingPath) {
+        if (controlDrawingCacheDirty) {
+            createControlDrawingCache(childrenViewRect, clippingPath);
+        }
+        drawClippedChildren(canvas, childrenViewRect, null);
+        canvas.drawBitmap(controlDrawingCache, 0, 0, null);
+    }
+
+    private void createControlDrawingCache(Rect childrenViewRect, Path clippingPath) {
+    }
+
     private void drawClippedChildren(Canvas canvas, Rect childrenViewRect, Path clippingPath) {
         canvas.save();
 
-        canvas.clipPath(clippingPath);
+        if (clippingPath != null) {
+            canvas.clipPath(clippingPath);
+        }
 
         super.dispatchDraw(canvas);
         canvas.restore();
