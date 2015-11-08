@@ -365,6 +365,28 @@ public class CircleSliderLayout
     }
 
     private void createControlDrawingCache(Rect childrenViewRect, Path clippingPath) {
+        Log.d(TAG, "createControlDrawingCache");
+        if (controlDrawingCache == null) {
+            controlDrawingCache = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        }
+        Canvas canvas = new Canvas(controlDrawingCache);
+
+        // We use a plain color as background
+        canvas.drawColor(getControlDrawingCacheBackgroundColor());
+
+        // We draw the progress tracks and the border
+        drawBorder(canvas, childrenViewRect);
+        drawProgressTrackBackground(canvas, childrenViewRect, clippingPath);
+        drawSecondaryProgressTrack(canvas, childrenViewRect, clippingPath);
+        drawProgressTrack(canvas, childrenViewRect, clippingPath);
+
+        // We punch a hole in the bitmap so we can view the children view through it
+        canvas.drawCircle(childrenViewRect.centerX(), childrenViewRect.centerY(), childrenViewRect.width() / 2, controlDrawingCachePaint);
+
+        // Finally we draw the thumb over everything
+        drawThumb(canvas, childrenViewRect);
+
+        controlDrawingCacheDirty = false;
     }
 
     private void drawClippedChildren(Canvas canvas, Rect childrenViewRect, Path clippingPath) {
