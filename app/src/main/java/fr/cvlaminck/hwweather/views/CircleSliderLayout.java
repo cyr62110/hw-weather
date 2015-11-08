@@ -5,27 +5,33 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import fr.cvlaminck.hwweather.R;
 
 public class CircleSliderLayout
         extends ViewGroup {
+    private final static String TAG = CircleSliderLayout.class.getSimpleName();
 
     /**
      * The offset is automatically calculated by the view
@@ -130,6 +136,10 @@ public class CircleSliderLayout
     private Paint secondaryProgressTrackPaint = null;
     private Paint progressTrackBackgroundPaint = null;
     private Paint touchZonePaint = null;
+
+    private Bitmap controlDrawingCache = null;
+    private boolean controlDrawingCacheDirty = true;
+    private Paint controlDrawingCachePaint = null;
 
     public static final Property<CircleSliderLayout, Float> PROGRESS = Property.of(CircleSliderLayout.class, Float.class, "progressValue");
     public static final Property<CircleSliderLayout, Float> PROGRESS_MAX_VALUE = Property.of(CircleSliderLayout.class, Float.class, "progressMaxValue");
