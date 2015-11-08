@@ -777,6 +777,24 @@ public class CircleSliderLayout
         return thumbRect.contains((int) coords.x, (int) coords.y);
     }
 
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        controlDrawingCacheDirty = true;
+    }
+
+    @Override
+    public void invalidate(Rect dirty) {
+        super.invalidate(dirty);
+        controlDrawingCacheDirty = true;
+    }
+
+    @Override
+    public void invalidate(int l, int t, int r, int b) {
+        super.invalidate(l, t, r, b);
+        controlDrawingCacheDirty = true;
+    }
+
     /**
      * Recreates all paint that will be used to draw the layout.
      */
